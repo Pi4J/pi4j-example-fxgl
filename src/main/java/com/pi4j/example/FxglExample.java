@@ -27,15 +27,13 @@ package com.pi4j.example;
  * #L%
  */
 
-
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.entity.Entity;
 import com.pi4j.Pi4J;
 import com.pi4j.context.Context;
-import com.pi4j.io.gpio.digital.DigitalInput;
+import com.pi4j.example.util.Pi4JHelper;
 import com.pi4j.io.gpio.digital.DigitalState;
-import com.pi4j.io.gpio.digital.PullResistance;
 import com.pi4j.util.Console;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
@@ -62,6 +60,7 @@ public class FxglExample extends GameApplication {
     private static final int PIN_JOYSTICK_DOWN = 6;
     private static final int PIN_JOYSTICK_LEFT = 13;
     private static final int PIN_JOYSTICK_RIGHT = 19;
+    private static final int PIN_BUTTON_FIRE = 8;
 
     private Context pi4j;
 
@@ -122,22 +121,41 @@ public class FxglExample extends GameApplication {
             // Print program title/header
             console.title("<-- The Pi4J Project -->", "FXGL Example project");
 
-            var joystickUpConfig = DigitalInput.newConfigBuilder(pi4j)
-                    .id("JoystickUp")
-                    .name("Press button")
-                    .address(PIN_JOYSTICK_UP)
-                    .pull(PullResistance.PULL_DOWN)
-                    .debounce(3000L)
-                    .provider("pigpio-digital-input");
-            var joystickUp = pi4j.create(joystickUpConfig);
+            var joystickUp = Pi4JHelper.getInput(pi4j, "JoystickUp", PIN_JOYSTICK_UP);
             joystickUp.addListener(e -> {
                 if (e.state() == DigitalState.LOW) {
                     System.out.println("Joystick UP");
                     moveUp();
                 }
             });
-
-            // TODO all joystick positions + extra buttons + LEDS
+            var joystickDown = Pi4JHelper.getInput(pi4j, "JoystickUp", PIN_JOYSTICK_DOWN);
+            joystickDown.addListener(e -> {
+                if (e.state() == DigitalState.LOW) {
+                    System.out.println("Joystick DOWN");
+                    moveDown();
+                }
+            });
+            var joystickLeft = Pi4JHelper.getInput(pi4j, "JoystickUp", PIN_JOYSTICK_LEFT);
+            joystickLeft.addListener(e -> {
+                if (e.state() == DigitalState.LOW) {
+                    System.out.println("Joystick LEFT");
+                    moveLeft();
+                }
+            });
+            var joystickRight = Pi4JHelper.getInput(pi4j, "JoystickUp", PIN_JOYSTICK_RIGHT);
+            joystickRight.addListener(e -> {
+                if (e.state() == DigitalState.LOW) {
+                    System.out.println("Joystick RIGHT");
+                    moveRight();
+                }
+            });
+            var buttonFire = Pi4JHelper.getInput(pi4j, "ButtonFire", PIN_BUTTON_FIRE);
+            buttonFire.addListener(e -> {
+                if (e.state() == DigitalState.LOW) {
+                    System.out.println("Button FIRE");
+                    shoot();
+                }
+            });
         } catch (Exception ex) {
             System.err.println("Error while initializing Pi4J: " + ex.getMessage());
         }
@@ -156,10 +174,10 @@ public class FxglExample extends GameApplication {
         scoreValue.setTranslateX(90);
         scoreValue.setTranslateY(20);
 
-        livesLabel.setTranslateX(getAppWidth() - 100);
+        livesLabel.setTranslateX(getAppWidth() - 100D);
         livesLabel.setTranslateY(20);
 
-        livesValue.setTranslateX(getAppWidth() - 30);
+        livesValue.setTranslateX(getAppWidth() - 30D);
         livesValue.setTranslateY(20);
 
         scoreValue.textProperty().bind(getGameState().intProperty("score").asString());
@@ -177,8 +195,7 @@ public class FxglExample extends GameApplication {
         onKey(KeyCode.DOWN, this::moveDown);
         onKey(KeyCode.LEFT, this::moveLeft);
         onKey(KeyCode.RIGHT, this::moveRight);
-        onBtnDown(MouseButton.PRIMARY, () ->
-                spawn("bullet", player.getCenter()));
+        onBtnDown(MouseButton.PRIMARY, this::shoot);
     }
 
     private void moveUp() {
@@ -205,6 +222,10 @@ public class FxglExample extends GameApplication {
         }
     }
 
+    private void shoot() {
+        spawn("bullet", player.getCenter());
+    }
+
     /**
      * Initialization of the game.
      */
@@ -213,7 +234,7 @@ public class FxglExample extends GameApplication {
         getGameWorld().addEntityFactory(gameFactory);
 
         // Add the player
-        this.player = spawn("player", getAppWidth() / 2 - 15, getAppHeight() / 2 - 15);
+        this.player = spawn("player", getAppWidth() / 2D - 15, getAppHeight() / 2D - 15);
 
         // Add a new enemy every second
         run(() -> spawn("enemy"), Duration.seconds(1.0));
@@ -230,9 +251,7 @@ public class FxglExample extends GameApplication {
         });
 
         onCollisionBegin(FxglExampleFactory.EntityType.ENEMY, FxglExampleFactory.EntityType.PLAYER, (enemy, player) -> {
-            showMessage("You Died!", () -> {
-                getGameController().startNewGame();
-            });
+            showMessage("You Died!", () -> getGameController().startNewGame());
         });
     }
 }
