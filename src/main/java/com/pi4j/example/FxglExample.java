@@ -132,6 +132,7 @@ public class FxglExample extends GameApplication {
             var joystickUp = pi4j.create(joystickUpConfig);
             joystickUp.addListener(e -> {
                 if (e.state() == DigitalState.LOW) {
+                    System.out.println("Joystick UP");
                     moveUp();
                 }
             });
