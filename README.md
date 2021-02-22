@@ -15,6 +15,10 @@ physical buttons.
 
 ## WIRING
 
+This project uses an [Arcade kit](https://www.kiwi-electronics.nl/pim-471?search=arcade&description=true).
+
+![Arcade kit components](assets/arcade_parts_kit.jpg)
+
 TODO 
 
 ## RUNTIME DEPENDENCIES
