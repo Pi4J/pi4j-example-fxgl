@@ -56,11 +56,16 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameState;
 public class FxglExample extends GameApplication {
 
     // BCM numbers of the connected components
-    private static final int PIN_JOYSTICK_UP = 5;
+    private static final int PIN_JOYSTICK_UP = 12;
     private static final int PIN_JOYSTICK_DOWN = 6;
-    private static final int PIN_JOYSTICK_LEFT = 13;
-    private static final int PIN_JOYSTICK_RIGHT = 19;
-    private static final int PIN_BUTTON_FIRE = 8;
+    private static final int PIN_JOYSTICK_LEFT = 20;
+    private static final int PIN_JOYSTICK_RIGHT = 16;
+    private static final int PIN_BUTTON_1 = 5;
+    private static final int PIN_BUTTON_2 = 11;
+    private static final int PIN_BUTTON_3 = 8;
+    private static final int PIN_BUTTON_4 = 25;
+    private static final int PIN_BUTTON_5 = 9;
+    private static final int PIN_BUTTON_6 = 10;
 
     private Context pi4j;
 
@@ -121,6 +126,12 @@ public class FxglExample extends GameApplication {
             // Print program title/header
             console.title("<-- The Pi4J Project -->", "FXGL Example project");
 
+            /*
+            TODO 
+            Current listeners call the move function once.
+            To be changed to continuously move the player as long as the joystick is pushed.
+            */
+
             var joystickUp = Pi4JHelper.getInput(pi4j, "JoystickUp", PIN_JOYSTICK_UP);
             joystickUp.addListener(e -> {
                 if (e.state() == DigitalState.LOW) {
@@ -128,28 +139,28 @@ public class FxglExample extends GameApplication {
                     moveUp();
                 }
             });
-            var joystickDown = Pi4JHelper.getInput(pi4j, "JoystickUp", PIN_JOYSTICK_DOWN);
+            var joystickDown = Pi4JHelper.getInput(pi4j, "JoystickDown", PIN_JOYSTICK_DOWN);
             joystickDown.addListener(e -> {
                 if (e.state() == DigitalState.LOW) {
                     System.out.println("Joystick DOWN");
                     moveDown();
                 }
             });
-            var joystickLeft = Pi4JHelper.getInput(pi4j, "JoystickUp", PIN_JOYSTICK_LEFT);
+            var joystickLeft = Pi4JHelper.getInput(pi4j, "JoystickLeft", PIN_JOYSTICK_LEFT);
             joystickLeft.addListener(e -> {
                 if (e.state() == DigitalState.LOW) {
                     System.out.println("Joystick LEFT");
                     moveLeft();
                 }
             });
-            var joystickRight = Pi4JHelper.getInput(pi4j, "JoystickUp", PIN_JOYSTICK_RIGHT);
+            var joystickRight = Pi4JHelper.getInput(pi4j, "JoystickRight", PIN_JOYSTICK_RIGHT);
             joystickRight.addListener(e -> {
                 if (e.state() == DigitalState.LOW) {
                     System.out.println("Joystick RIGHT");
                     moveRight();
                 }
             });
-            var buttonFire = Pi4JHelper.getInput(pi4j, "ButtonFire", PIN_BUTTON_FIRE);
+            var buttonFire = Pi4JHelper.getInput(pi4j, "ButtonFire", PIN_BUTTON_1);
             buttonFire.addListener(e -> {
                 if (e.state() == DigitalState.LOW) {
                     System.out.println("Button FIRE");

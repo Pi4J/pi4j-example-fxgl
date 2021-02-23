@@ -14,7 +14,7 @@ public class Pi4JHelper {
         return pi4j.create(DigitalInput.newConfigBuilder(pi4j)
                 .id(id)
                 .address(bcm)
-                .pull(PullResistance.PULL_DOWN)
+                .pull(PullResistance.PULL_UP)
                 .debounce(3000L)
                 .provider("pigpio-digital-input"));
 

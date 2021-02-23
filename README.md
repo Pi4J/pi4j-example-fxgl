@@ -23,6 +23,13 @@ TODO
 
 ## RUNTIME DEPENDENCIES
 
+https://gluonhq.com/download/javafx-linux-arm32-drm-sdk/
+wget -O openjfx.zip https://gluonhq.com/download/javafx-linux-arm32-drm-sdk/
+unzip openjfx.zip
+sudo mv arm32fb-sdk/ /opt/arm32fb-sdk/
+
+
+
 This project uses Pi4J V.2 which has the following runtime dependency requirements:
 - [**SLF4J (API)**](https://www.slf4j.org/)
 - [**SLF4J-SIMPLE**](https://www.slf4j.org/)
