@@ -34,13 +34,6 @@ The GPIO numbers are defined by the hat and can be found on [pinout.xyz](https:/
 
 ## RUNTIME DEPENDENCIES
 
-https://gluonhq.com/download/javafx-linux-arm32-drm-sdk/
-wget -O openjfx.zip https://gluonhq.com/download/javafx-linux-arm32-drm-sdk/
-unzip openjfx.zip
-sudo mv arm32fb-sdk/ /opt/arm32fb-sdk/
-
-
-
 This project uses Pi4J V.2 which has the following runtime dependency requirements:
 - [**SLF4J (API)**](https://www.slf4j.org/)
 - [**SLF4J-SIMPLE**](https://www.slf4j.org/)
@@ -48,6 +41,9 @@ This project uses Pi4J V.2 which has the following runtime dependency requiremen
 dependency comes pre-installed on recent Raspbian images.  However, you can also 
 download and install it yourself using the instructions found 
 [here](http://abyz.me.uk/rpi/pigpio/download.html).
+  
+As this application has a JavaFX user interface, we will also need some extra runtimes. This is
+fully described on ["User interface with JavaFX](https://v2.pi4j.com/getting-started/user-interface-with-javafx/).
 
 ## BUILD DEPENDENCIES & INSTRUCTIONS
 
