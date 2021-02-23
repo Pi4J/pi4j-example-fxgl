@@ -15,11 +15,22 @@ physical buttons.
 
 ## WIRING
 
-This project uses an [Arcade kit](https://www.kiwi-electronics.nl/pim-471?search=arcade&description=true).
+This project uses an [Arcade kit](https://www.kiwi-electronics.nl/pim-471?search=arcade&description=true)
+in combination with a [Picade X HAT USB-C](https://www.kiwi-electronics.nl/index.php?route=product/product&search=arcade&description=true&product_id=4337)
+to easily connect the wires of the buttons and joystick.
+
+Connect the USB power to the hat instead of your Raspberry Pi, and use the power button on the hat to 
+start your Raspberry Pi.
 
 ![Arcade kit components](assets/arcade_parts_kit.jpg)
+![Picade Hat](assets/picade_hat.jpg)
 
-TODO 
+Pimoroni provides a [GitHub project](https://github.com/pimoroni/picade-hat) with software to use
+this hat with RetroPie, but this project aims to take full control of the hardware with Java.
+
+The GPIO numbers are defined by the hat and can be found on [pinout.xyz](https://pinout.xyz/pinout/picade_hat)
+
+![Picade Hat pin numbers](assets/picade_hat_pin_numbers.png)
 
 ## RUNTIME DEPENDENCIES
 
