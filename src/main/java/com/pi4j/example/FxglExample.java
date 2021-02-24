@@ -13,7 +13,7 @@ package com.pi4j.example;
  * %%
  * Copyright (C) 2012 - 2020 Pi4J
  * %%
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the "License"),
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -56,18 +56,12 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameState;
 public class FxglExample extends GameApplication {
 
     // BCM numbers of the connected components
+    // Full list can be found on https://pinout.xyz/pinout/picade_hat
     private static final int PIN_JOYSTICK_UP = 12;
     private static final int PIN_JOYSTICK_DOWN = 6;
     private static final int PIN_JOYSTICK_LEFT = 20;
     private static final int PIN_JOYSTICK_RIGHT = 16;
     private static final int PIN_BUTTON_1 = 5;
-    private static final int PIN_BUTTON_2 = 11;
-    private static final int PIN_BUTTON_3 = 8;
-    private static final int PIN_BUTTON_4 = 25;
-    private static final int PIN_BUTTON_5 = 9;
-    private static final int PIN_BUTTON_6 = 10;
-
-    private Context pi4j;
 
     /**
      * Reference to the factory which will defines how all the types must be created.
@@ -80,11 +74,18 @@ public class FxglExample extends GameApplication {
     private Entity player;
 
     /**
+     * Logger helper provided by Pi4J
+     */
+    private static Console console;
+
+    /**
      * Main entry point where the application starts.
      *
      * @param args Start-up arguments
      */
     public static void main(String[] args) {
+        console = new Console();
+        
         // Launch the FXGL game application
         launch(args);
     }
@@ -96,7 +97,7 @@ public class FxglExample extends GameApplication {
      */
     @Override
     protected void initSettings(GameSettings settings) {
-        settings.setTitle("Viks Shark Game");
+        settings.setTitle("Sample JavaFX + Pi4J game");
         settings.setWidth(300);
         initPi4j();
     }
@@ -117,11 +118,7 @@ public class FxglExample extends GameApplication {
      */
     private void initPi4j() {
         try {
-            pi4j = Pi4J.newAutoContext();
-
-            // Create Pi4J console wrapper/helper
-            // (This is a utility class to abstract some of the boilerplate stdin/stdout code)
-            final var console = new Console();
+            Context pi4j = Pi4J.newAutoContext();
 
             // Print program title/header
             console.title("<-- The Pi4J Project -->", "FXGL Example project");
@@ -135,40 +132,40 @@ public class FxglExample extends GameApplication {
             var joystickUp = Pi4JHelper.getInput(pi4j, "JoystickUp", PIN_JOYSTICK_UP);
             joystickUp.addListener(e -> {
                 if (e.state() == DigitalState.LOW) {
-                    System.out.println("Joystick UP");
+                    console.println("Joystick UP");
                     moveUp();
                 }
             });
             var joystickDown = Pi4JHelper.getInput(pi4j, "JoystickDown", PIN_JOYSTICK_DOWN);
             joystickDown.addListener(e -> {
                 if (e.state() == DigitalState.LOW) {
-                    System.out.println("Joystick DOWN");
+                    console.println("Joystick DOWN");
                     moveDown();
                 }
             });
             var joystickLeft = Pi4JHelper.getInput(pi4j, "JoystickLeft", PIN_JOYSTICK_LEFT);
             joystickLeft.addListener(e -> {
                 if (e.state() == DigitalState.LOW) {
-                    System.out.println("Joystick LEFT");
+                    console.println("Joystick LEFT");
                     moveLeft();
                 }
             });
             var joystickRight = Pi4JHelper.getInput(pi4j, "JoystickRight", PIN_JOYSTICK_RIGHT);
             joystickRight.addListener(e -> {
                 if (e.state() == DigitalState.LOW) {
-                    System.out.println("Joystick RIGHT");
+                    console.println("Joystick RIGHT");
                     moveRight();
                 }
             });
             var buttonFire = Pi4JHelper.getInput(pi4j, "ButtonFire", PIN_BUTTON_1);
             buttonFire.addListener(e -> {
                 if (e.state() == DigitalState.LOW) {
-                    System.out.println("Button FIRE");
+                    console.println("Button FIRE");
                     shoot();
                 }
             });
         } catch (Exception ex) {
-            System.err.println("Error while initializing Pi4J: " + ex.getMessage());
+            console.println("Error while initializing Pi4J: " + ex.getMessage());
         }
     }
 
@@ -256,13 +253,12 @@ public class FxglExample extends GameApplication {
      */
     @Override
     protected void initPhysics() {
-        onCollisionBegin(FxglExampleFactory.EntityType.BULLET, FxglExampleFactory.EntityType.ENEMY, (bullet, enemy) -> {
-            bullet.removeFromWorld();
-            enemy.removeFromWorld();
+        onCollisionBegin(FxglExampleFactory.EntityType.BULLET, FxglExampleFactory.EntityType.ENEMY, (b, e) -> {
+            b.removeFromWorld();
+            e.removeFromWorld();
         });
 
-        onCollisionBegin(FxglExampleFactory.EntityType.ENEMY, FxglExampleFactory.EntityType.PLAYER, (enemy, player) -> {
-            showMessage("You Died!", () -> getGameController().startNewGame());
-        });
+        onCollisionBegin(FxglExampleFactory.EntityType.ENEMY, FxglExampleFactory.EntityType.PLAYER, (e, p) ->
+                showMessage("You Died!", () -> getGameController().startNewGame()));
     }
 }
