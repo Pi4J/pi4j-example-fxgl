@@ -1,74 +1,69 @@
 package com.pi4j.example;
 
 import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
-import static com.almasb.fxgl.dsl.FXGL.getAppWidth;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
+import static com.almasb.fxgl.dsl.FXGL.texture;
 
-import com.almasb.fxgl.dsl.components.OffscreenCleanComponent;
-import com.almasb.fxgl.dsl.components.ProjectileComponent;
-import com.almasb.fxgl.dsl.components.RandomMoveComponent;
+import com.almasb.fxgl.core.math.FXGLMath;
+import com.almasb.fxgl.dsl.components.AutoRotationComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
-import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
+import com.pi4j.example.component.SnakeHeadComponent;
+
+import java.util.List;
 
 /**
  * The factory which defines how each entity looks like
  */
 public class FxglExampleFactory implements EntityFactory {
 
+    public static final int GRID_SIZE = 32;
+
     /**
      * Types of objects we are going to use in our game.
      */
     public enum EntityType {
-        PLAYER, BULLET, ENEMY
+        SNAKE_HEAD, SNAKE_BODY
     }
 
-    @Spawns("player")
-    public Entity newPlayer(SpawnData data) {
-        return entityBuilder()
-                .from(data)
-                .type(EntityType.PLAYER)
-                .viewWithBBox(new Rectangle(30, 30, Color.BLUE))
+    /**
+     * List of images to select for random body elements
+     */
+    private List<String> textureNames = List.of(
+            "angry.png",
+            "cool.png",
+            "crying.png",
+            "dead.png",
+            "emoji.png",
+            "greed.png",
+            "happy.png",
+            "hypnotized.png",
+            "in-love.png",
+            "laughing.png",
+            "pressure.png",
+            "smile.png",
+            "wink.png"
+    );
+
+    @Spawns("snakeHead")
+    public Entity newSnakeHead(SpawnData data) {
+        return entityBuilder(data)
+                .type(EntityType.SNAKE_HEAD)
+                .viewWithBBox(texture(FXGLMath.random(textureNames).get(), GRID_SIZE, GRID_SIZE))
                 .collidable()
+                .with(new AutoRotationComponent())
+                .with(new SnakeHeadComponent())
                 .build();
     }
 
-    @Spawns("bullet")
-    public Entity newBullet(SpawnData data) {
-        Entity player = getGameWorld().getSingleton(EntityType.PLAYER);
-        Point2D direction = getInput().getMousePositionWorld()
-                .subtract(player.getCenter());
-
-        return entityBuilder()
-                .from(data)
-                .type(EntityType.BULLET)
-                .viewWithBBox(new Rectangle(10, 2, Color.BLACK))
+    @Spawns("snakeBody")
+    public Entity newSnakeBody(SpawnData data) {
+        return entityBuilder(data)
+                .type(EntityType.SNAKE_BODY)
+                .viewWithBBox(texture(FXGLMath.random(textureNames).get(), GRID_SIZE, GRID_SIZE))
                 .collidable()
-                .with(new ProjectileComponent(direction, 1000))
-                .with(new OffscreenCleanComponent())
-                .build();
-    }
-
-    @Spawns("enemy")
-    public Entity newEnemy(SpawnData data) {
-        Circle circle = new Circle(20, 20, 20, Color.RED);
-        circle.setStroke(Color.BROWN);
-        circle.setStrokeWidth(2.0);
-
-        return entityBuilder()
-                .from(data)
-                .type(EntityType.ENEMY)
-                .viewWithBBox(circle)
-                .collidable()
-                .with(new RandomMoveComponent(
-                        new Rectangle2D(0, 0,
-                                getAppWidth(), getAppHeight()), 50))
+                .with(new AutoRotationComponent())
                 .build();
     }
 }
