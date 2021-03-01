@@ -58,6 +58,8 @@ public class Pi4JFactory {
                 if (e.state() == DigitalState.LOW) {
                     console.println("Joystick UP");
                     getExecutor().startAsyncFX(() -> getInput().mockKeyPress(KeyCode.UP));
+                } else {
+                    getExecutor().startAsyncFX(() -> getInput().mockKeyRelease(KeyCode.UP));
                 }
             });
             var joystickDown = initInputGpio(pi4j, "JoystickDown", PIN_JOYSTICK_DOWN);
@@ -65,6 +67,8 @@ public class Pi4JFactory {
                 if (e.state() == DigitalState.LOW) {
                     console.println("Joystick DOWN");
                     getExecutor().startAsyncFX(() -> getInput().mockKeyPress(KeyCode.DOWN));
+                } else {
+                    getExecutor().startAsyncFX(() -> getInput().mockKeyRelease(KeyCode.DOWN));
                 }
             });
             var joystickLeft = initInputGpio(pi4j, "JoystickLeft", PIN_JOYSTICK_LEFT);
@@ -72,6 +76,8 @@ public class Pi4JFactory {
                 if (e.state() == DigitalState.LOW) {
                     console.println("Joystick LEFT");
                     getExecutor().startAsyncFX(() -> getInput().mockKeyPress(KeyCode.LEFT));
+                } else {
+                    getExecutor().startAsyncFX(() -> getInput().mockKeyRelease(KeyCode.LEFT));
                 }
             });
             var joystickRight = initInputGpio(pi4j, "JoystickRight", PIN_JOYSTICK_RIGHT);
@@ -79,13 +85,17 @@ public class Pi4JFactory {
                 if (e.state() == DigitalState.LOW) {
                     console.println("Joystick RIGHT");
                     getExecutor().startAsyncFX(() -> getInput().mockKeyPress(KeyCode.RIGHT));
+                } else {
+                    getExecutor().startAsyncFX(() -> getInput().mockKeyRelease(KeyCode.RIGHT));
                 }
             });
             var buttonFire = initInputGpio(pi4j, "ButtonFood", PIN_BUTTON_1);
             buttonFire.addListener(e -> {
                 if (e.state() == DigitalState.LOW) {
-                    console.println("Button FIRE");
+                    console.println("Button FOOD");
                     getExecutor().startAsyncFX(() -> getInput().mockKeyPress(KeyCode.F));
+                } else {
+                    getExecutor().startAsyncFX(() -> getInput().mockKeyRelease(KeyCode.F));
                 }
             });
         } catch (Exception ex) {
