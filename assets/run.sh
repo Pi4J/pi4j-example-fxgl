@@ -6,6 +6,6 @@ java  \
   -Dprism.verbose=false \
   -Djavafx.verbose=false \
   -Dmonocle.platform=EGL \
-  --module-path /opt/arm32fb-sdk/lib, . \
+  --module-path .:/opt/arm32fb-sdk/lib \
   --add-modules javafx.controls \
   --module com.pi4j.example/com.pi4j.example.FxglExample $@
