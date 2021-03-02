@@ -33,7 +33,6 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.pi4j.example.component.SnakeHeadComponent;
 import com.pi4j.example.util.Pi4JFactory;
-import com.pi4j.util.Console;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -47,9 +46,6 @@ import static com.pi4j.example.FxglExampleFactory.GRID_SIZE;
 
 /**
  * <p>This example fully describes the base usage of Pi4J to create a game</p>
- *
- * @author Frank Delporte (<a href="https://www.webtechie.be">https://www.webtechie.be</a>)
- * @version $Id: $Id
  */
 public class FxglExample extends GameApplication {
 
@@ -135,13 +131,13 @@ public class FxglExample extends GameApplication {
      */
     @Override
     protected void initInput() {
-        onKeyDown(KeyCode.LEFT, () -> this.player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
+        onKeyDown(KeyCode.LEFT, () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
                 SnakeHeadComponent::left));
-        onKeyDown(KeyCode.RIGHT, () -> this.player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
+        onKeyDown(KeyCode.RIGHT, () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
                 SnakeHeadComponent::right));
-        onKeyDown(KeyCode.UP, () -> this.player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
+        onKeyDown(KeyCode.UP, () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
                 SnakeHeadComponent::up));
-        onKeyDown(KeyCode.DOWN, () -> this.player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
+        onKeyDown(KeyCode.DOWN, () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
                 SnakeHeadComponent::down));
         onKeyDown(KeyCode.F, () -> player.getComponent(SnakeHeadComponent.class).grow());
         onKeyDown(KeyCode.G, () -> player.getComponent(SnakeHeadComponent.class).log());
@@ -155,7 +151,7 @@ public class FxglExample extends GameApplication {
     protected void initGame() {
         getGameWorld().addEntityFactory(gameFactory);
         // Add the player
-        this.player = spawn("snakeHead", 0, 0);
+        player = spawn("snakeHead", 0, 0);
         pi4JFactory.getConsole().println("Init game done");
     }
 }
