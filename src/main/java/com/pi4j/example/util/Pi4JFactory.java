@@ -47,69 +47,34 @@ public class Pi4JFactory {
             // Print program title/header
             console.title("<-- The Pi4J Project -->", "FXGL Example project");
 
-            /*
-            TODO
-            Current listeners call the move function once.
-            To be changed to continuously move the player as long as the joystick is pushed.
-            */
+            // Joystick inputs
+            initInputGpio(pi4j, "JoystickUp", PIN_JOYSTICK_UP, KeyCode.UP);
+            initInputGpio(pi4j, "JoystickDown", PIN_JOYSTICK_DOWN, KeyCode.DOWN);
+            initInputGpio(pi4j, "JoystickLeft", PIN_JOYSTICK_LEFT, KeyCode.LEFT);
+            initInputGpio(pi4j, "JoystickRight", PIN_JOYSTICK_RIGHT, KeyCode.RIGHT);
 
-            var joystickUp = initInputGpio(pi4j, "JoystickUp", PIN_JOYSTICK_UP);
-            joystickUp.addListener(e -> {
-                if (e.state() == DigitalState.LOW) {
-                    console.println("Joystick UP");
-                    getExecutor().startAsyncFX(() -> getInput().mockKeyPress(KeyCode.UP));
-                } else {
-                    getExecutor().startAsyncFX(() -> getInput().mockKeyRelease(KeyCode.UP));
-                }
-            });
-            var joystickDown = initInputGpio(pi4j, "JoystickDown", PIN_JOYSTICK_DOWN);
-            joystickDown.addListener(e -> {
-                if (e.state() == DigitalState.LOW) {
-                    console.println("Joystick DOWN");
-                    getExecutor().startAsyncFX(() -> getInput().mockKeyPress(KeyCode.DOWN));
-                } else {
-                    getExecutor().startAsyncFX(() -> getInput().mockKeyRelease(KeyCode.DOWN));
-                }
-            });
-            var joystickLeft = initInputGpio(pi4j, "JoystickLeft", PIN_JOYSTICK_LEFT);
-            joystickLeft.addListener(e -> {
-                if (e.state() == DigitalState.LOW) {
-                    console.println("Joystick LEFT");
-                    getExecutor().startAsyncFX(() -> getInput().mockKeyPress(KeyCode.LEFT));
-                } else {
-                    getExecutor().startAsyncFX(() -> getInput().mockKeyRelease(KeyCode.LEFT));
-                }
-            });
-            var joystickRight = initInputGpio(pi4j, "JoystickRight", PIN_JOYSTICK_RIGHT);
-            joystickRight.addListener(e -> {
-                if (e.state() == DigitalState.LOW) {
-                    console.println("Joystick RIGHT");
-                    getExecutor().startAsyncFX(() -> getInput().mockKeyPress(KeyCode.RIGHT));
-                } else {
-                    getExecutor().startAsyncFX(() -> getInput().mockKeyRelease(KeyCode.RIGHT));
-                }
-            });
-            var buttonFire = initInputGpio(pi4j, "ButtonFood", PIN_BUTTON_1);
-            buttonFire.addListener(e -> {
-                if (e.state() == DigitalState.LOW) {
-                    console.println("Button FOOD");
-                    getExecutor().startAsyncFX(() -> getInput().mockKeyPress(KeyCode.F));
-                } else {
-                    getExecutor().startAsyncFX(() -> getInput().mockKeyRelease(KeyCode.F));
-                }
-            });
+            // Push button inputs
+            initInputGpio(pi4j, "ButtonFood", PIN_BUTTON_1, KeyCode.F);
         } catch (Exception ex) {
             console.println("Error while initializing Pi4J: " + ex.getMessage());
         }
     }
 
-    private DigitalInput initInputGpio(Context pi4j, String id, int bcm) throws Exception {
-        return pi4j.create(DigitalInput.newConfigBuilder(pi4j)
+    private void initInputGpio(Context pi4j, String id, int bcm, KeyCode keyCode) throws Exception {
+        var input = pi4j.create(DigitalInput.newConfigBuilder(pi4j)
                 .id(id)
                 .address(bcm)
                 .pull(PullResistance.PULL_UP)
                 .debounce(3000L)
                 .provider("pigpio-digital-input"));
+        input.addListener(e -> {
+            if (e.state() == DigitalState.LOW) {
+                console.println("Input change for " + id);
+                getExecutor().startAsyncFX(() -> getInput().mockKeyPress(keyCode));
+            } else {
+                getExecutor().startAsyncFX(() -> getInput().mockKeyRelease(keyCode));
+            }
+        });
 
     }
 }
