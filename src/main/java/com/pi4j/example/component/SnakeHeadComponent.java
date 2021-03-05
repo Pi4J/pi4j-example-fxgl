@@ -59,6 +59,12 @@ public class SnakeHeadComponent extends Component {
     public void die() {
         inc("lives", -1);
 
+        if (geti("lives") <= 0) {
+            getDialogService().showMessageBox("Game Over", 
+            () -> getGameController().startNewGame());
+            return;
+        }
+
         // clean up body parts, apart from head
         bodyParts.stream()
                 .skip(1)
@@ -95,7 +101,7 @@ public class SnakeHeadComponent extends Component {
         Point2D pos = lastBodyPart.getObject("prevPos");
 
         var body = spawn("snakeBody", pos);
-
+        body.setProperty("prevPos", pos);
         bodyParts.add(body);
     }
 
