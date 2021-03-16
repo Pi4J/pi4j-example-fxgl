@@ -29,7 +29,7 @@ public class SnakeHeadComponent extends Component {
         entity.setProperty("prevPos", entity.getPosition());
         entity.translate(direction.multiply(GRID_SIZE));
 
-        checkForBounds();
+
 
         for (int i = 1; i < bodyParts.size(); i++) {
             var prevPart = bodyParts.get(i - 1);
@@ -40,9 +40,11 @@ public class SnakeHeadComponent extends Component {
             part.setProperty("prevPos", part.getPosition());
             part.setPosition(prevPos);
         }
+
+        checkForCollision();
     }
 
-    private void checkForBounds() {
+    private void checkForCollision() {
         if (entity.getX() < 0)
             die();
 
@@ -54,6 +56,12 @@ public class SnakeHeadComponent extends Component {
 
         if (entity.getY() >= getAppHeight())
             die();
+
+        for(int i=1; i<bodyParts.size(); i++) {
+            if (entity.getPosition().equals(bodyParts.get(i).getPosition())) {
+                die();
+            }
+        }
     }
 
     public void die() {

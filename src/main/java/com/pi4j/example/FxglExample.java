@@ -31,6 +31,8 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
+import com.almasb.fxgl.physics.CollisionHandler;
+import com.pi4j.example.component.SnakeFoodComponent;
 import com.pi4j.example.component.SnakeHeadComponent;
 import com.pi4j.example.util.Pi4JFactory;
 import javafx.scene.input.KeyCode;
@@ -63,6 +65,12 @@ public class FxglExample extends GameApplication {
      * Player object we are going to use to provide to the factory so it can start a bullet from the player center.
      */
     private Entity player;
+
+
+    /**
+     * food object is spawned at random on the map
+     */
+    private Entity food;
 
     /**
      * Main entry point where the application starts.
@@ -126,6 +134,20 @@ public class FxglExample extends GameApplication {
         pi4JFactory.getConsole().println("Init game UI done");
     }
 
+    @Override
+    protected void initPhysics() {
+        getPhysicsWorld().addCollisionHandler(new CollisionHandler(player, food) {
+
+            // order of types is the same as passed into the constructor
+            @Override
+            protected void onCollisionBegin(Entity snake, Entity snakeFood) {
+                System.out.println("COLLIDE");
+                snakeFood.getComponentOptional(SnakeFoodComponent.class).ifPresent(SnakeFoodComponent::respawn);
+                snake.getComponent(SnakeHeadComponent.class).grow();
+            }
+        });
+    }
+
     /**
      * Input configuration, here you configure all the input events like key presses, mouse clicks, etc.
      */
@@ -152,6 +174,7 @@ public class FxglExample extends GameApplication {
         getGameWorld().addEntityFactory(gameFactory);
         // Add the player
         player = spawn("snakeHead", 0, 0);
+        food = spawn("snakeFood", getAppWidth()/2, getAppHeight()/2);
         pi4JFactory.getConsole().println("Init game done");
     }
 }
