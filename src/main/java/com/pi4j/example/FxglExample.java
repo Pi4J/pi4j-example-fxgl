@@ -134,19 +134,7 @@ public class FxglExample extends GameApplication {
         pi4JFactory.getConsole().println("Init game UI done");
     }
 
-    @Override
-    protected void initPhysics() {
-        getPhysicsWorld().addCollisionHandler(new CollisionHandler(player, food) {
 
-            // order of types is the same as passed into the constructor
-            @Override
-            protected void onCollisionBegin(Entity snake, Entity snakeFood) {
-                System.out.println("COLLIDE");
-                snakeFood.getComponentOptional(SnakeFoodComponent.class).ifPresent(SnakeFoodComponent::respawn);
-                snake.getComponent(SnakeHeadComponent.class).grow();
-            }
-        });
-    }
 
     /**
      * Input configuration, here you configure all the input events like key presses, mouse clicks, etc.
@@ -174,7 +162,23 @@ public class FxglExample extends GameApplication {
         getGameWorld().addEntityFactory(gameFactory);
         // Add the player
         player = spawn("snakeHead", 0, 0);
-        food = spawn("snakeFood", getAppWidth()/2, getAppHeight()/2);
+//        food = spawn("snakeFood", getAppWidth()/2, getAppHeight()/2);
+        food = spawn("snakeFood", 0, 0);
         pi4JFactory.getConsole().println("Init game done");
+    }
+
+    @Override
+    protected void initPhysics() {
+
+        getPhysicsWorld().addCollisionHandler(new CollisionHandler(SnakeType.SNAKE_HEAD, SnakeType.SNAKE_FOOD) {
+
+            // order of types is the same as passed into the constructor
+            @Override
+            protected void onCollisionBegin(Entity player, Entity food) {
+                food.getComponentOptional(SnakeFoodComponent.class).ifPresent(SnakeFoodComponent::respawn);
+                player.getComponent(SnakeHeadComponent.class).grow();
+            }
+        });
+        pi4JFactory.getConsole().println("Init physics done");
     }
 }

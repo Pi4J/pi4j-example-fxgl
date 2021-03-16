@@ -17,13 +17,12 @@ public class SnakeFoodComponent extends Component {
 
     @Override
     public void onUpdate(double tpf) {
-        entity.setProperty("prevPos", entity.getPosition());
+
     }
 
     public void respawn() {
-        System.out.println("RESPAWN");
-        entity.removeFromWorld();
-        spawn("snakeFood", FXGLMath.random(0, getAppWidth()), FXGLMath.random(0, getAppHeight()));
+        entity.setPosition(FXGLMath.random(1, 29)*GRID_SIZE, FXGLMath.random(1, 29)*GRID_SIZE);
+        log();
     }
 
     public void log() {

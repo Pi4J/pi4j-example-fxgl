@@ -16,6 +16,7 @@ import com.almasb.fxgl.physics.HitBox;
 import com.pi4j.example.component.SnakeFoodComponent;
 import com.pi4j.example.component.SnakeHeadComponent;
 
+import java.awt.*;
 import java.util.List;
 
 /**
@@ -24,13 +25,6 @@ import java.util.List;
 public class FxglExampleFactory implements EntityFactory {
 
     public static final int GRID_SIZE = 32;
-
-    /**
-     * Types of objects we are going to use in our game.
-     */
-    public enum EntityType {
-        SNAKE_HEAD, SNAKE_BODY, SNAKE_FOOD
-    }
 
     /**
      * List of images to select for random body elements
@@ -58,9 +52,9 @@ public class FxglExampleFactory implements EntityFactory {
     @Spawns("snakeHead")
     public Entity newSnakeHead(SpawnData data) {
         return entityBuilder(data)
-                .type(EntityType.SNAKE_HEAD)
+                .type(SnakeType.SNAKE_HEAD)
                 .viewWithBBox(texture(FXGLMath.random(snakeBodyTextureNames).get(), GRID_SIZE, GRID_SIZE))
-                .bbox(new HitBox(BoundingShape.box(data.getX(), data.getY())))
+                .bbox(new HitBox(BoundingShape.box(GRID_SIZE, GRID_SIZE)))
                 .with(new CollidableComponent(true))
                 .with(new AutoRotationComponent())
                 .with(new SnakeHeadComponent())
@@ -70,9 +64,8 @@ public class FxglExampleFactory implements EntityFactory {
     @Spawns("snakeBody")
     public Entity newSnakeBody(SpawnData data) {
         return entityBuilder(data)
-                .type(EntityType.SNAKE_BODY)
+                .type(SnakeType.SNAKE_BODY)
                 .viewWithBBox(texture(FXGLMath.random(snakeBodyTextureNames).get(), GRID_SIZE, GRID_SIZE))
-                .with(new CollidableComponent(true))
                 .with(new AutoRotationComponent())
                 .build();
     }
@@ -80,9 +73,9 @@ public class FxglExampleFactory implements EntityFactory {
     @Spawns("snakeFood")
         public Entity newSnakeFood(SpawnData data) {
             return entityBuilder(data)
-                    .type(EntityType.SNAKE_FOOD)
+                    .type(SnakeType.SNAKE_FOOD)
                     .viewWithBBox(texture(FXGLMath.random(snakeFoodTextureNames).get(), GRID_SIZE, GRID_SIZE))
-                    .bbox(new HitBox(BoundingShape.box(data.getX(), data.getY())))
+                    .bbox(new HitBox(BoundingShape.box(GRID_SIZE, GRID_SIZE)))
                     .with(new SnakeFoodComponent())
                     .with(new CollidableComponent(true))
                     .build();
