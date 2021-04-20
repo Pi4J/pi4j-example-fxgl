@@ -36,6 +36,7 @@ import com.pi4j.example.component.SnakeFoodComponent;
 import com.pi4j.example.component.SnakeHeadComponent;
 import com.pi4j.example.piMapping.ArcadeBtn;
 import com.pi4j.example.piMapping.PicadeGameApplication;
+import com.pi4j.example.piMapping.Pin;
 import com.pi4j.example.util.Pi4JFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
@@ -139,15 +140,15 @@ public class FxglExample extends PicadeGameApplication {
      */
     @Override
     protected void initInput() {
-        onKeyDown("JoystickLeft", PIN_JOYSTICK_LEFT, KeyCode.LEFT,  () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
+        onKeyDown(Pin.PIN_JOYSTICK_LEFT, KeyCode.LEFT,  () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
                 SnakeHeadComponent::left));
-        onKeyDown("JoystickRight", PIN_JOYSTICK_RIGHT, KeyCode.RIGHT, () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
+        onKeyDown(Pin.PIN_JOYSTICK_RIGHT, KeyCode.RIGHT, () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
                 SnakeHeadComponent::right));
-        onKeyDown("JoystickUp", PIN_JOYSTICK_UP, KeyCode.UP, () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
+        onKeyDown(Pin.PIN_JOYSTICK_UP, KeyCode.UP, () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
                 SnakeHeadComponent::up));
-        onKeyDown("JoystickDown", PIN_JOYSTICK_DOWN, KeyCode.DOWN, () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
+        onKeyDown(Pin.PIN_JOYSTICK_DOWN, KeyCode.DOWN, () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
                 SnakeHeadComponent::down));
-        onKeyDown("ButtonFood", PIN_BUTTON_1, KeyCode.F, () -> player.getComponent(SnakeHeadComponent.class).grow());
+        onKeyDown(Pin.PIN_BUTTON_1, KeyCode.F, () -> player.getComponent(SnakeHeadComponent.class).grow());
         onKeyDown(KeyCode.G, () -> player.getComponent(SnakeHeadComponent.class).log());
         getConsole().println("Init game inputs done");
     }

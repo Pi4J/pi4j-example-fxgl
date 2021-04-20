@@ -26,11 +26,11 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getInput;
 
 public class PicadeGameApplication extends GameApplication {
 
-    public static final int PIN_JOYSTICK_UP = 12;
-    public static final int PIN_JOYSTICK_DOWN = 6;
-    public static final int PIN_JOYSTICK_LEFT = 20;
-    public static final int PIN_JOYSTICK_RIGHT = 16;
-    public static final int PIN_BUTTON_1 = 5;
+//    public static final int PIN_JOYSTICK_UP = 12;
+//    public static final int PIN_JOYSTICK_DOWN = 6;
+//    public static final int PIN_JOYSTICK_LEFT = 20;
+//    public static final int PIN_JOYSTICK_RIGHT = 16;
+//    public static final int PIN_BUTTON_1 = 5;
 
     private final Console console;
     private Context pi4j;
@@ -57,16 +57,15 @@ public class PicadeGameApplication extends GameApplication {
     /**
      * This method binds the action to the specific keyCode and the input on a raspberryPi
      *
-     * @param id: name of the input
-     * @param bcm: pin number of the input
+     * @param pin: enum pin where bcm are mapped
      * @param keyCode: keyboard key code
      * @param action
      */
-    public final void onKeyDown(String id, int bcm, KeyCode keyCode, Runnable action) {
+    public final void onKeyDown(Pin pin, KeyCode keyCode, Runnable action) {
         com.almasb.fxgl.dsl.FXGL.onKeyDown(keyCode, action);
         //com.almasb.fxgl.dsl.FXGL.onKeyDown(keyCode, action);
         try {
-            initInputGpio(pi4j, id, bcm, keyCode);
+            initInputGpio(pi4j, pin.name(), pin.getBcm(), keyCode);
         } catch (Exception ex) {
             console.println("Error while initializing Pi4J: " + ex.getMessage());
         }
@@ -80,11 +79,10 @@ public class PicadeGameApplication extends GameApplication {
      */
     public final void onKeyDown(KeyCode keyCode, Runnable action) {
         com.almasb.fxgl.dsl.FXGL.onKeyDown(keyCode, action);
-        //com.almasb.fxgl.dsl.FXGL.onKeyDown(keyCode, action);
     }
 
     private void initInputGpio(Context pi4j, String id, int bcm, KeyCode keyCode) throws Exception {
-       var input =  pi4j.create(DigitalInput.newConfigBuilder(pi4j)
+       var input = pi4j.create(DigitalInput.newConfigBuilder(pi4j)
                 .id(id)
                 .address(bcm)
                 .pull(PullResistance.PULL_UP)
