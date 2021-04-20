@@ -8,6 +8,9 @@ import com.pi4j.io.gpio.digital.PullResistance;
 import com.pi4j.util.Console;
 import javafx.scene.input.KeyCode;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getExecutor;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getInput;
 
@@ -24,12 +27,15 @@ public class Pi4JFactory {
     private final Console console;
     private Context pi4j;
 
+    private Map<String, DigitalInput> inputGpios;
+
     public Pi4JFactory() {
         console = new Console();
+        inputGpios = new HashMap();
 
         try {
             pi4j = Pi4J.newAutoContext();
-            initInputGpios();
+            //initInputGpios();
         } catch (Exception ex) {
             console.println("Error while initializing Pi4J: {}", ex.getMessage());
         }
@@ -60,8 +66,9 @@ public class Pi4JFactory {
         }
     }
 
-    private void initInputGpio(Context pi4j, String id, int bcm, KeyCode keyCode) throws Exception {
-        var input = pi4j.create(DigitalInput.newConfigBuilder(pi4j)
+    public void initInputGpio(Context pi4j, String id, int bcm, KeyCode keyCode) throws Exception {
+//        inputGpios.put(id, pi4j.create(DigitalInput.newConfigBuilder(pi4j)
+        var input =  pi4j.create(DigitalInput.newConfigBuilder(pi4j)
                 .id(id)
                 .address(bcm)
                 .pull(PullResistance.PULL_UP)
@@ -77,4 +84,18 @@ public class Pi4JFactory {
         });
 
     }
+
+    public Context getPi4j() {
+        return pi4j;
+    }
+
+    //    public void addListener(String id, KeyCode keyCode) {
+//                inputGpios.get(id).addListener(e -> {
+//            if (e.state() == DigitalState.LOW) {
+//                getExecutor().startAsyncFX(() -> getInput().mockKeyPress(keyCode));
+//            } else {
+//                getExecutor().startAsyncFX(() -> getInput().mockKeyRelease(keyCode));
+//            }
+//        });
+//    }
 }

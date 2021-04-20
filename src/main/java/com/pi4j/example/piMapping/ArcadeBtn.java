@@ -4,7 +4,7 @@ import com.pi4j.io.gpio.digital.DigitalInput;
 import com.pi4j.io.gpio.digital.DigitalState;
 import com.pi4j.io.gpio.digital.PullResistance;
 
-public class ArcadeBtn implements ArcadeButton {
+public class ArcadeBtn {
 
     private DigitalInput button;
     private String btnStatus;
@@ -30,12 +30,10 @@ public class ArcadeBtn implements ArcadeButton {
 
     }
 
-    @Override
     public String getStatus() {
         return btnStatus;
     }
 
-    @Override
     public boolean isPressed() {
         return isPressed;
     }

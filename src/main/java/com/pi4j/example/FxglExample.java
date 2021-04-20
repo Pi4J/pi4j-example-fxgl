@@ -34,6 +34,8 @@ import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.pi4j.example.component.SnakeFoodComponent;
 import com.pi4j.example.component.SnakeHeadComponent;
+import com.pi4j.example.piMapping.ArcadeBtn;
+import com.pi4j.example.piMapping.PicadeGameApplication;
 import com.pi4j.example.util.Pi4JFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
@@ -49,17 +51,13 @@ import static com.pi4j.example.FxglExampleFactory.GRID_SIZE;
 /**
  * <p>This example fully describes the base usage of Pi4J to create a game</p>
  */
-public class FxglExample extends GameApplication {
+public class FxglExample extends PicadeGameApplication {
 
     /**
      * Reference to the FXGL factory which will defines how all the types must be created.
      */
     private final FxglExampleFactory gameFactory = new FxglExampleFactory();
 
-    /**
-     * Reference to the Pi4J factory which manages the GPIOs.
-     */
-    private final Pi4JFactory pi4JFactory = new Pi4JFactory();
 
     /**
      * Player object we are going to use to provide to the factory so it can start a bullet from the player center.
@@ -93,7 +91,7 @@ public class FxglExample extends GameApplication {
         settings.setHeight(GRID_SIZE * 30);
         settings.setTitle("FXGL Snake Game");
         settings.setTicksPerSecond(10);
-        pi4JFactory.getConsole().println("Init game settings done");
+        getConsole().println("Init game settings done");
     }
 
     /**
@@ -105,7 +103,7 @@ public class FxglExample extends GameApplication {
     protected void initGameVars(Map<String, Object> vars) {
         vars.put("score", 0);
         vars.put("lives", 5);
-        pi4JFactory.getConsole().println("Init game vars done");
+        getConsole().println("Init game vars done");
     }
 
     @Override
@@ -131,7 +129,7 @@ public class FxglExample extends GameApplication {
         livesValue.textProperty().bind(getGameState().intProperty("lives").asString());
 
         getGameScene().addUINodes(scoreLabel, scoreValue, livesLabel, livesValue);
-        pi4JFactory.getConsole().println("Init game UI done");
+        getConsole().println("Init game UI done");
     }
 
 
@@ -141,17 +139,17 @@ public class FxglExample extends GameApplication {
      */
     @Override
     protected void initInput() {
-        onKeyDown(KeyCode.LEFT, () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
+        onKeyDown("JoystickLeft", PIN_JOYSTICK_LEFT, KeyCode.LEFT,  () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
                 SnakeHeadComponent::left));
-        onKeyDown(KeyCode.RIGHT, () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
+        onKeyDown("JoystickRight", PIN_JOYSTICK_RIGHT, KeyCode.RIGHT, () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
                 SnakeHeadComponent::right));
-        onKeyDown(KeyCode.UP, () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
+        onKeyDown("JoystickUp", PIN_JOYSTICK_UP, KeyCode.UP, () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
                 SnakeHeadComponent::up));
-        onKeyDown(KeyCode.DOWN, () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
+        onKeyDown("JoystickDown", PIN_JOYSTICK_DOWN, KeyCode.DOWN, () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
                 SnakeHeadComponent::down));
-        onKeyDown(KeyCode.F, () -> player.getComponent(SnakeHeadComponent.class).grow());
+        onKeyDown("ButtonFood", PIN_BUTTON_1, KeyCode.F, () -> player.getComponent(SnakeHeadComponent.class).grow());
         onKeyDown(KeyCode.G, () -> player.getComponent(SnakeHeadComponent.class).log());
-        pi4JFactory.getConsole().println("Init game inputs done");
+        getConsole().println("Init game inputs done");
     }
 
     /**
@@ -164,7 +162,7 @@ public class FxglExample extends GameApplication {
         player = spawn("snakeHead", 0, 0);
 //        food = spawn("snakeFood", getAppWidth()/2, getAppHeight()/2);
         food = spawn("snakeFood", 0, 0);
-        pi4JFactory.getConsole().println("Init game done");
+        getConsole().println("Init game done");
     }
 
     @Override
@@ -179,6 +177,6 @@ public class FxglExample extends GameApplication {
                 player.getComponent(SnakeHeadComponent.class).grow();
             }
         });
-        pi4JFactory.getConsole().println("Init physics done");
+        getConsole().println("Init physics done");
     }
 }
