@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.pi4j</groupId>
@@ -143,7 +143,7 @@
                         <configuration>
                             <target>
                                 <copy todir="${project.build.directory}/distribution" overwrite="true" flatten="true">
-                                    <fileset dir="assets" includes="*.sh" ></fileset>
+                                    <fileset dir="assets" includes="*.sh"></fileset>
                                 </copy>
                                 <chmod dir="${project.build.directory}/distribution" perm="ugo+rx" includes="**/*.sh"/>
                             </target>
@@ -173,6 +173,11 @@
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>true</overWriteSnapshots>
                             <overWriteIfNewer>true</overWriteIfNewer>
+                            <!--
+                             On the Raspberry Pi we use specific JavaFX dependencies,
+                             so we exclude them here and they are added in the run-script.
+                             -->
+                            <excludeGroupIds>org.openjfx</excludeGroupIds>
                         </configuration>
                     </execution>
                 </executions>
