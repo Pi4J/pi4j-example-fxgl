@@ -63,7 +63,6 @@ public class PicadeGameApplication extends GameApplication {
      */
     public final void onKeyDown(Pin pin, KeyCode keyCode, Runnable action) {
         com.almasb.fxgl.dsl.FXGL.onKeyDown(keyCode, action);
-        //com.almasb.fxgl.dsl.FXGL.onKeyDown(keyCode, action);
         try {
             initInputGpio(pi4j, pin.name(), pin.getBcm(), keyCode);
         } catch (Exception ex) {
