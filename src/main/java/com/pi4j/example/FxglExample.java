@@ -43,7 +43,7 @@ import java.util.Map;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameState;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getWorldProperties;
 import static com.pi4j.example.FxglExampleFactory.GRID_SIZE;
 
 /**
@@ -127,13 +127,12 @@ public class FxglExample extends GameApplication {
         livesValue.setTranslateX(getAppWidth() - 30);
         livesValue.setTranslateY(20);
 
-        scoreValue.textProperty().bind(getGameState().intProperty("score").asString());
-        livesValue.textProperty().bind(getGameState().intProperty("lives").asString());
+        scoreValue.textProperty().bind(getWorldProperties().intProperty("score").asString());
+        livesValue.textProperty().bind(getWorldProperties().intProperty("lives").asString());
 
         getGameScene().addUINodes(scoreLabel, scoreValue, livesLabel, livesValue);
         pi4JFactory.getConsole().println("Init game UI done");
     }
-
 
 
     /**
@@ -160,9 +159,7 @@ public class FxglExample extends GameApplication {
     @Override
     protected void initGame() {
         getGameWorld().addEntityFactory(gameFactory);
-        // Add the player
         player = spawn("snakeHead", 0, 0);
-//        food = spawn("snakeFood", getAppWidth()/2, getAppHeight()/2);
         food = spawn("snakeFood", 0, 0);
         pi4JFactory.getConsole().println("Init game done");
     }
