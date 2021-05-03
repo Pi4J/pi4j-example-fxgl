@@ -26,12 +26,6 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getInput;
 
 public class PicadeGameApplication extends GameApplication {
 
-//    public static final int PIN_JOYSTICK_UP = 12;
-//    public static final int PIN_JOYSTICK_DOWN = 6;
-//    public static final int PIN_JOYSTICK_LEFT = 20;
-//    public static final int PIN_JOYSTICK_RIGHT = 16;
-//    public static final int PIN_BUTTON_1 = 5;
-
     private final Console console;
     private Context pi4j;
 

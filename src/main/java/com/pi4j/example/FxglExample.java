@@ -27,17 +27,14 @@ package com.pi4j.example;
  * #L%
  */
 
-import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.pi4j.example.component.SnakeFoodComponent;
 import com.pi4j.example.component.SnakeHeadComponent;
-import com.pi4j.example.piMapping.ArcadeBtn;
 import com.pi4j.example.piMapping.PicadeGameApplication;
 import com.pi4j.example.piMapping.Pin;
-import com.pi4j.example.util.Pi4JFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
