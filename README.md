@@ -20,7 +20,7 @@ The full description is available on
 
 ![Arcade kit components](assets/arcade_parts_kit.jpg)
 ![Picade Hat](assets/picade_hat.jpg)
-![Picade Hat pin numbers](assets/picade_hat_pin_numbers.png)
+![Picade Hat picadeControl numbers](assets/picade_hat_pin_numbers.png)
 
 ## RUNTIME DEPENDENCIES
 

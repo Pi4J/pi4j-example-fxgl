@@ -51,14 +51,14 @@ public class PicadeGameApplication extends GameApplication {
     /**
      * This method binds the action to the specific keyCode and the input on a raspberryPi
      *
-     * @param pin: enum pin where bcm are mapped
+     * @param picadeControl: enum picadeControl where bcm are mapped
      * @param keyCode: keyboard key code
      * @param action
      */
-    public final void onKeyDown(Pin pin, KeyCode keyCode, Runnable action) {
+    public final void onKeyDown(PicadeControl picadeControl, KeyCode keyCode, Runnable action) {
         com.almasb.fxgl.dsl.FXGL.onKeyDown(keyCode, action);
         try {
-            initInputGpio(pi4j, pin.name(), pin.getBcm(), keyCode);
+            initInputGpio(pi4j, picadeControl.name(), picadeControl.getBcm(), keyCode);
         } catch (Exception ex) {
             console.println("Error while initializing Pi4J: " + ex.getMessage());
         }

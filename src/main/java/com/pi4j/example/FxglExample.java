@@ -33,8 +33,8 @@ import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.pi4j.example.component.SnakeFoodComponent;
 import com.pi4j.example.component.SnakeHeadComponent;
+import com.pi4j.example.piMapping.PicadeControl;
 import com.pi4j.example.piMapping.PicadeGameApplication;
-import com.pi4j.example.piMapping.Pin;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -136,15 +136,16 @@ public class FxglExample extends PicadeGameApplication {
      */
     @Override
     protected void initInput() {
-        onKeyDown(Pin.PIN_JOYSTICK_LEFT, KeyCode.LEFT,  () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
+        getConsole().println("Init game inputs started");
+        onKeyDown(PicadeControl.PIN_JOYSTICK_LEFT, KeyCode.LEFT,  () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
                 SnakeHeadComponent::left));
-        onKeyDown(Pin.PIN_JOYSTICK_RIGHT, KeyCode.RIGHT, () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
+        onKeyDown(PicadeControl.PIN_JOYSTICK_RIGHT, KeyCode.RIGHT, () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
                 SnakeHeadComponent::right));
-        onKeyDown(Pin.PIN_JOYSTICK_UP, KeyCode.UP, () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
+        onKeyDown(PicadeControl.PIN_JOYSTICK_UP, KeyCode.UP, () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
                 SnakeHeadComponent::up));
-        onKeyDown(Pin.PIN_JOYSTICK_DOWN, KeyCode.DOWN, () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
+        onKeyDown(PicadeControl.PIN_JOYSTICK_DOWN, KeyCode.DOWN, () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
                 SnakeHeadComponent::down));
-        onKeyDown(Pin.PIN_BUTTON_1, KeyCode.F, () -> player.getComponent(SnakeHeadComponent.class).grow());
+        onKeyDown(PicadeControl.PIN_BUTTON_1, KeyCode.F, () -> player.getComponent(SnakeHeadComponent.class).grow());
         onKeyDown(KeyCode.G, () -> player.getComponent(SnakeHeadComponent.class).log());
         getConsole().println("Init game inputs done");
     }

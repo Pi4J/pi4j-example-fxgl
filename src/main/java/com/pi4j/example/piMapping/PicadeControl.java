@@ -1,6 +1,6 @@
 package com.pi4j.example.piMapping;
 
-public enum Pin {
+public enum PicadeControl {
     PIN_JOYSTICK_UP(12),
     PIN_JOYSTICK_DOWN(6),
     PIN_JOYSTICK_LEFT(20),
@@ -9,7 +9,7 @@ public enum Pin {
 
     private int bcm;
 
-    private Pin(int bcm) {
+    private PicadeControl(int bcm) {
         this.bcm = bcm;
     }
 
