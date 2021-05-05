@@ -75,7 +75,11 @@ public class FxglExample extends PicadeGameApplication {
      */
     public static void main(String[] args) {
         // Launch the FXGL game application
-        launch(args);
+        try {
+            launch(args);
+        } catch (UnsatisfiedLinkError ule) {
+            System.out.println(ule);
+        }
     }
 
     /**
