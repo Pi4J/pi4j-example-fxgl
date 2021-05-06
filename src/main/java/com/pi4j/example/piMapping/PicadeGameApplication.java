@@ -60,7 +60,7 @@ public class PicadeGameApplication extends GameApplication {
         try {
             initInputGpio(pi4j, picadeControl.name(), picadeControl.getBcm(), keyCode);
         } catch (Exception ex) {
-            console.println("Error while initializing Pi4J: " + ex.getMessage());
+            console.println("Error while initializing Input GPIO: " + ex.getMessage());
         }
     }
 
@@ -90,7 +90,7 @@ public class PicadeGameApplication extends GameApplication {
             }
         });
         inputGpios.put(id, input);
-
+        console.println("Input " + id + " initialized");
     }
 
     public Map<String, DigitalInput> getInputGpios() {
