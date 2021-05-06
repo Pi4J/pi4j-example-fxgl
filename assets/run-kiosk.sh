@@ -1,4 +1,3 @@
-
 #!/usr/bin/env bash
 /sbin/init 3
 export ENABLE_GLUON_COMMERCIAL_EXTENSIONS=true
