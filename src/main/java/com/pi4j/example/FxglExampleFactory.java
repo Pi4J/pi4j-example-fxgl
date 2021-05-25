@@ -16,7 +16,6 @@ import com.almasb.fxgl.physics.HitBox;
 import com.pi4j.example.component.SnakeFoodComponent;
 import com.pi4j.example.component.SnakeHeadComponent;
 
-import java.awt.*;
 import java.util.List;
 
 /**
