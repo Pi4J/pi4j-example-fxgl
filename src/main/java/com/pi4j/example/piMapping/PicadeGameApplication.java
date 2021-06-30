@@ -65,6 +65,22 @@ public class PicadeGameApplication extends GameApplication {
     }
 
     /**
+     * This method binds the action to the specific keyCode and the input on a raspberryPi
+     *
+     * @param picadeControl: enum picadeControl where bcm are mapped
+     * @param keyCode: keyboard key code
+     * @param action
+     */
+    public final void onKey(PicadeControl picadeControl, KeyCode keyCode, Runnable action) {
+        com.almasb.fxgl.dsl.FXGL.onKey(keyCode, action);
+        try {
+            initInputGpio(pi4j, picadeControl.name(), picadeControl.getBcm(), keyCode);
+        } catch (Exception ex) {
+            console.println("Error while initializing Input GPIO: " + ex.getMessage());
+        }
+    }
+
+    /**
      * OnKeyDown of FXGL
      *
      * @param keyCode
@@ -74,8 +90,19 @@ public class PicadeGameApplication extends GameApplication {
         com.almasb.fxgl.dsl.FXGL.onKeyDown(keyCode, action);
     }
 
+    /**
+     * OnKeyDown of FXGL
+     *
+     * @param keyCode
+     * @param actionName
+     * @param action
+     */
+    public final void onKeyDown(KeyCode keyCode, String actionName, Runnable action) {
+        com.almasb.fxgl.dsl.FXGL.onKeyDown(keyCode, actionName, action);
+    }
+
     private void initInputGpio(Context pi4j, String id, int bcm, KeyCode keyCode) throws Exception {
-       var input = pi4j.create(DigitalInput.newConfigBuilder(pi4j)
+        var input = pi4j.create(DigitalInput.newConfigBuilder(pi4j)
                 .id(id)
                 .address(bcm)
                 .pull(PullResistance.PULL_UP)
