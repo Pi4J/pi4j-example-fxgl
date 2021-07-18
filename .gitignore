@@ -1,7 +1,17 @@
-/.idea/
+# Maven
 /target/
+
+# Eclipse
+.classpath
+.factorypath
+.project
+.settings
+
+# IntelliJ
+/.idea/
+*.iml
+
+# FXGL
+
 /system/
 /logs/
-.classpath
-.project
-.settings/
