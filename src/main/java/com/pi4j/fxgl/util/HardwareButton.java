@@ -2,6 +2,8 @@ package com.pi4j.fxgl.util;
 
 import java.time.Duration;
 
+import javafx.scene.input.KeyCode;
+
 /**
  * @author Dieter Holz
  */
@@ -49,4 +51,6 @@ public interface HardwareButton {
     default String getLabel() {
         return getButtonDelegate().getLabel();
     }
+
+
 }

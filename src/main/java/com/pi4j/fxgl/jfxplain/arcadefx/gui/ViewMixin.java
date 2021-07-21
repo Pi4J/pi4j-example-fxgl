@@ -1,4 +1,4 @@
-package com.pi4j.fxgl.jfxplain.picadefx.gui;
+package com.pi4j.fxgl.jfxplain.arcadefx.gui;
 
 import java.util.List;
 

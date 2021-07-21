@@ -6,6 +6,8 @@
 
 package com.pi4j.fxgl.game;
 
+import java.util.Map;
+
 import javafx.scene.input.KeyCode;
 import javafx.util.Duration;
 
@@ -13,6 +15,10 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.Entity;
+import com.pi4j.fxgl.util.ArcadeConsoles;
+import com.pi4j.fxgl.util.ArcadeToFXGLBridge;
+import com.pi4j.fxgl.util.HardwareButton;
+import com.pi4j.fxgl.util.PicadeButton;
 
 import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
 import static com.almasb.fxgl.dsl.FXGL.getAppHeight;
@@ -56,8 +62,8 @@ public class DropApp extends GameApplication {
         // initialize common game / window settings.
         settings.setTitle("Drop");
         settings.setVersion("1.0");
-        settings.setWidth(800);
-        settings.setHeight(600);
+        settings.setWidth(ArcadeConsoles.PICADE.getWidth());
+        settings.setHeight(ArcadeConsoles.PICADE.getHeight());
     }
 
     @Override
@@ -71,6 +77,9 @@ public class DropApp extends GameApplication {
 
         // currently not working on pi
         //loopBGM("bgm.mp3");
+
+        // initial the Arcade console to get access to the Joystick and the physical buttons
+        PicadeButton.initializeAll();
     }
 
     @Override
@@ -87,35 +96,57 @@ public class DropApp extends GameApplication {
         });
     }
 
+    /**
+     * Called every frame _only_ in Play state.
+     *
+     * @param tpf time per frame
+     */
     @Override
     protected void onUpdate(double tpf) {
-
         // for each entity of Type.DROPLET translate (move) it down
         getGameWorld().getEntitiesByType(Type.DROPLET).forEach(droplet -> droplet.translateY(150 * tpf));
     }
 
+    /**
+     * build an entity with Type.BUCKET
+     * at the position X = getAppWidth() / 2 and Y = getAppHeight() - 200
+     * with a view "bucket.png", which is an image located in /resources/assets/textures/
+     * also create a bounding box from that view
+     * make the entity collidable
+     * finally, complete building and attach to the game world
+     *
+     * there's only one bucket
+     */
     private void spawnBucket() {
-        // build an entity with Type.BUCKET
-        // at the position X = getAppWidth() / 2 and Y = getAppHeight() - 200
-        // with a view "bucket.png", which is an image located in /resources/assets/textures/
-        // also create a bounding box from that view
-        // make the entity collidable
-        // finally, complete building and attach to the game world
-
         Entity bucket = entityBuilder()
                 .type(Type.BUCKET)
-                .at(getAppWidth() / 2, getAppHeight() - 100)
+                .at(getAppWidth() / 2.0, getAppHeight() - 100.0)
                 .viewWithBBox("bucket.png")
                 .collidable()
                 .buildAndAttach();
 
         // bind bucket's X value to mouse X
-        bucket.xProperty().bind(getInput().mouseXWorldProperty());
+        getInput().mouseXWorldProperty().addListener((observableValue, number, t1) -> bucket.setX(t1.doubleValue()));
 
-        onKey(KeyCode.LEFT, () -> bucket.setX(bucket.getX() - 5));
+        onKey(KeyCode.LEFT,  () -> bucket.setX(bucket.getX() - 5));
         onKey(KeyCode.RIGHT, () -> bucket.setX(bucket.getX() + 5));
+
+
+        // As a last step attach the Arcade console to the bucket
+        PicadeButton.JOYSTICK.xProperty().bindBidirectional(bucket.xProperty());
+
+        ArcadeToFXGLBridge.bridge(Map.of(PicadeButton.Button_1, KeyCode.LEFT,
+                                         PicadeButton.Button_2, KeyCode.RIGHT,
+                                         PicadeButton.ESCAPE,   KeyCode.ESCAPE
+                                        ));
+//        ArcadeToFXGLBridge.mapButtonToKeyCode(PicadeButton.Button_1, KeyCode.LEFT);
+//        ArcadeToFXGLBridge.mapButtonToKeyCode(PicadeButton.Button_2, KeyCode.RIGHT);
+//        ArcadeToFXGLBridge.mapButtonToKeyCode(PicadeButton.Button_2, KeyCode.RIGHT);
     }
 
+    /**
+     * this is done often
+     */
     private void spawnDroplet() {
         entityBuilder()
                 .type(Type.DROPLET)
@@ -127,8 +158,5 @@ public class DropApp extends GameApplication {
 
     public static void main(String[] args) {
         launch(args);
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            System.out.println("Shutdown Hook is running !");
-        }));
     }
 }

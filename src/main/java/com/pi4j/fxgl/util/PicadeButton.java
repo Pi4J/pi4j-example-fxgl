@@ -43,7 +43,7 @@ public enum PicadeButton implements HardwareButton {
         for(HardwareButton b  : values()){
             b.initialize();
         }
-        JOYSTICK = new Joystick(UP, DOWN, LEFT, RIGHT, Resolution.PICADE);
+        JOYSTICK = new Joystick(UP, DOWN, LEFT, RIGHT, ArcadeConsoles.PICADE);
     }
 
 }

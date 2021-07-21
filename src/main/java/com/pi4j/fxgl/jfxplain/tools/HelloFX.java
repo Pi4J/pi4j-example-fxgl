@@ -1,4 +1,4 @@
-package com.pi4j.fxgl.jfxplain;
+package com.pi4j.fxgl.jfxplain.tools;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -11,6 +11,16 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
+ * A tiny tool to check the basic setup of JavaFX.
+ *
+ * It's a long way from here to have a real application.
+ *
+ * But as long as 'HelloFX' isn't properly working, it's useless to go any further.
+ *
+ * You should make it run in X11-mode and in DRM.
+ *
+ * It's not meant to be any kind of template to start your development.
+ *
  * Initially copied from https://github.com/openjfx/samples/blob/master/CommandLine/Modular/CLI/hellofx/src/hellofx/HelloFX.java
  *
  * @author Dieter Holz

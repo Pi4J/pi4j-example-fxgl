@@ -1,6 +1,4 @@
-package com.pi4j.fxgl.jfxplain.picadefx.pui;
-
-import java.util.function.Consumer;
+package com.pi4j.fxgl.jfxplain.arcadefx.pui;
 
 import javafx.application.Platform;
 
@@ -21,7 +19,6 @@ public abstract class PUI_Base<T> {
     protected void withModel(Runnable action) {
         Platform.runLater(() -> action.run());
     }
-
 
     protected abstract void initialize(T model);
 

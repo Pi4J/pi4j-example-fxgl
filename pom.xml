@@ -14,19 +14,21 @@
     <properties>
         <!-- The class that will be started  -->
 
-        <!-- <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.game.DropApp</launcher.class>               -->
-        <!-- <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.jfxplain.FrameRateTest</launcher.class>     -->
-        <!-- <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.jfxplain.HelloFX</launcher.class>           -->
-        <!-- <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.jfxplain.picadefx.PicadeFX</launcher.class> -->
-        <!-- <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.pi4jplain.MinimalPi4J</launcher.class>      -->
-             <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.pi4jplain.PinChecker</launcher.class>
+             <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.game.DropApp</launcher.class>
+        <!-- <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.jfxplain.tools.FrameRateTest</launcher.class> -->
+        <!-- <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.jfxplain.tools.HelloFX</launcher.class>       -->    
+        <!-- <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.jfxplain.arcadefx.PicadeFX</launcher.class>   -->
+        <!-- <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.jfxplain.arcadefx.GameHAT_FX</launcher.class> -->
+        <!-- <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.pi4jplain.MinimalPi4J</launcher.class>        -->
+        <!-- <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.pi4jplain.PinChecker</launcher.class>         -->
 
         <fxgl.launcher.args/>
 
         <!-- Setup for the RaspPi -->
         <pi.username>pi</pi.username>
         <pi.password>pi</pi.password>
-        <pi.hostname/>
+        <pi.card>card1</pi.card>
+        <pi.ipnumber/>
         <pi.port>22</pi.port>
         <pi.deploydirectory>/home/pi/deploy</pi.deploydirectory>
 
@@ -37,6 +39,8 @@
         <fxgl.version>11.16</fxgl.version>
         <javafx.version>17-ea+15</javafx.version>
         <pi4j.version>2.0-SNAPSHOT</pi4j.version>
+
+        <slf4j.version>1.7.32</slf4j.version>
         <junit.version>5.7.2</junit.version>
 
         <!-- Plugin Versions-->
@@ -120,6 +124,10 @@
                     <groupId>org.openjfx</groupId>
                     <artifactId>*</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
 
@@ -130,6 +138,12 @@
             <groupId>com.pi4j</groupId>
             <artifactId>pi4j-core</artifactId>
             <version>${pi4j.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- Pi4J Raspberry Pi Platform -->
@@ -137,6 +151,12 @@
             <groupId>com.pi4j</groupId>
             <artifactId>pi4j-plugin-raspberrypi</artifactId>
             <version>${pi4j.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- Pi4J Raspberry Pi GPIO -->
@@ -144,6 +164,12 @@
             <groupId>com.pi4j</groupId>
             <artifactId>pi4j-plugin-pigpio</artifactId>
             <version>${pi4j.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- Pi4J Mock Platform -->
@@ -151,7 +177,33 @@
             <groupId>com.pi4j</groupId>
             <artifactId>pi4j-plugin-mock</artifactId>
             <version>${pi4j.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
             <!-- <scope>test</scope> -->
+        </dependency>
+
+        <!-- SLF4J API -->
+        <!--
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
         </dependency>
 
         <!-- JUnit -->
@@ -328,13 +380,13 @@
                                 <configuration>
                                     <target>
                                         <!-- Ensure target directory exists on RaspPi -->
-                                        <sshexec host="${pi.hostname}" port="${pi.port}"
+                                        <sshexec host="${pi.ipnumber}" port="${pi.port}"
                                                  username="${pi.username}" password="${pi.password}"
                                                  trust="true" command="mkdir --parents ${pi.deploydirectory}; rm -f ${pi.deploydirectory}/*"/>
 
                                         <!-- Transfer distribution folder to RaspPi via SCP -->
                                         <scp trust="true"
-                                             todir="${pi.username}:${pi.password}@${pi.hostname}:${pi.deploydirectory}"
+                                             todir="${pi.username}:${pi.password}@${pi.ipnumber}:${pi.deploydirectory}"
                                              port="${pi.port}">
                                             <fileset dir="${project.build.directory}/distribution">
                                                 <exclude name="javafx*.jar"/>/>
@@ -342,10 +394,10 @@
                                         </scp>
 
                                         <!-- Run JFX application on Raspberry Pi -->
-                                        <sshexec host="${pi.hostname}" port="${pi.port}"
+                                        <sshexec host="${pi.ipnumber}" port="${pi.port}"
                                                  username="${pi.username}" password="${pi.password}" trust="true"
                                                  failonerror="false" usepty="true" useSystemIn="true"
-                                                 command="sudo  java-kiosk --module-path ${pi.deploydirectory} --module ${launcher.class}"/>
+                                                 command="sudo  java-kiosk -Degl.displayid=/dev/dri/${pi.card} --module-path ${pi.deploydirectory} --module ${launcher.class}"/>
                                     </target>
                                 </configuration>
                             </execution>
@@ -379,13 +431,13 @@
                                 <configuration>
                                     <target>
                                         <!-- Ensure target directory exists on RaspPi -->
-                                        <sshexec host="${pi.hostname}" port="${pi.port}"
+                                        <sshexec host="${pi.ipnumber}" port="${pi.port}"
                                                  username="${pi.username}" password="${pi.password}"
                                                  trust="true" command="mkdir --parents ${pi.deploydirectory}; rm -f ${pi.deploydirectory}/*"/>
 
                                         <!-- Transfer distribution folder to RaspPi via SCP -->
                                         <scp trust="true"
-                                             todir="${pi.username}:${pi.password}@${pi.hostname}:${pi.deploydirectory}"
+                                             todir="${pi.username}:${pi.password}@${pi.ipnumber}:${pi.deploydirectory}"
                                              port="${pi.port}">
                                             <fileset dir="${project.build.directory}/distribution">
                                                 <exclude name="javafx*.jar"/>/>
@@ -393,7 +445,7 @@
                                         </scp>
 
                                         <!-- Run JFX application on Raspberry Pi -->
-                                        <sshexec host="${pi.hostname}" port="${pi.port}"
+                                        <sshexec host="${pi.ipnumber}" port="${pi.port}"
                                                  username="${pi.username}" password="${pi.password}" trust="true"
                                                  failonerror="false" usepty="true" useSystemIn="true"
                                                  command="DISPLAY=:0 XAUTHORITY=/home/pi/.Xauthority sudo -E java --module-path /opt/javafx-sdk-17/lib:${pi.deploydirectory} --add-modules javafx.controls -Dprism.forceGPU=true -Dprism.verbose=true --module ${launcher.class}"/>

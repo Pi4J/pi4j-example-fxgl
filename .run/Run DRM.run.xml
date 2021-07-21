@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="FXGL Run Kiosk" type="MavenRunConfiguration" factoryName="Maven">
+  <configuration default="false" name="FXGL Run DRM" type="MavenRunConfiguration" factoryName="Maven">
     <MavenSettings>
       <option name="myGeneralSettings" />
       <option name="myRunnerSettings">
@@ -11,7 +11,7 @@
           <option name="jreName" value="#USE_PROJECT_JDK" />
           <option name="mavenProperties">
             <map>
-              <entry key="remote.host" value="raspberrypi.local" />
+              <entry key="pi.ipnumber" value="192.168.119.86" />
             </map>
           </option>
           <option name="passParentEnv" value="true" />

@@ -7,7 +7,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 /**
- * Technically a lot of joysticks consist of four buttons, that can be pressed or depressed.
+ * Technically a lot of joysticks used in arcade consoles consist internally of four buttons, that can be pressed or depressed.
  *
  * There can be 0, 1 or 2 buttons pressed at the same time.
  *
@@ -43,7 +43,7 @@ public class Joystick {
      *
      * Intentionally private. If you need to support a new Joystick, define a new constant like PICADE_JOYSTICK and GAME_HAT_JOYSTICK.
      */
-    Joystick(HardwareButton up, HardwareButton down, HardwareButton left, HardwareButton right, Resolution resolution) {
+    Joystick(HardwareButton up, HardwareButton down, HardwareButton left, HardwareButton right, ArcadeConsoles resolution) {
         this.up = up;
         this.down = down;
         this.left = left;

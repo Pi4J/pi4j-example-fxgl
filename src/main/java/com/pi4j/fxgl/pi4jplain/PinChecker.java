@@ -14,13 +14,9 @@ import com.pi4j.plugin.raspberrypi.platform.RaspberryPiPlatform;
  * @author Dieter Holz
  */
 public class PinChecker {
-    private static final int[] ALL_DIGITAL_INPUT_BCMS = {4, 5, 6, 12, 13, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27};
+    private static final int[] ALL_DIGITAL_INPUT_BCMS = {4, 5, 6, 8, 9, 10, 11, 12, 13, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27};
 
     public static void main(String[] args) throws Exception {
-//        final var console = new Console();
-//
-//        console.title("<-- The Pi4J Project -->", "Helps to find the pin of attached buttons");
-
         final var piGpio = PiGpio.newNativeInstance();
 
         // Build Pi4J context with this platform and PiGPIO providers
@@ -35,8 +31,7 @@ public class PinChecker {
                              .add(PiGpioDigitalInputProvider.newInstance(piGpio))  // on our arcade console we just have digitalInput
                              .build();
 
-        // Here we will create I/O interfaces for a (GPIO) digital input pin.
-
+        // Create DigitalInput for all input pins
         for (int bcm : ALL_DIGITAL_INPUT_BCMS) {
             var buttonConfig = DigitalInput.newConfigBuilder(pi4j)
                                            .id("BCM_" + bcm)
@@ -59,9 +54,10 @@ public class PinChecker {
 
         System.out.println("Press the buttons to see them in action!");
 
-        // Wait for 15 seconds while handling events before exiting
-        delay(Duration.ofSeconds(30));
+        // Wait for 30 seconds while handling events before exiting
+        delay(Duration.ofSeconds(60));
 
+        // don't forget to shutdown
         pi4j.shutdown();
     }
 

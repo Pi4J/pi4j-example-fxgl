@@ -31,10 +31,6 @@ public enum GameHATButton implements HardwareButton {
         button = new HardwareButtonImpl(bcmPin, label);
     }
 
-    public static Joystick createJoystick() {
-        return new Joystick(UP, DOWN, LEFT, RIGHT, Resolution.GAME_HAT);
-    }
-
     @Override
     public HardwareButton getButtonDelegate() {
         return button;
@@ -44,6 +40,6 @@ public enum GameHATButton implements HardwareButton {
         for(HardwareButton b  : values()){
             b.initialize();
         }
-        JOYSTICK = new Joystick(UP, DOWN, LEFT, RIGHT, Resolution.GAME_HAT);
+        JOYSTICK = new Joystick(UP, DOWN, LEFT, RIGHT, ArcadeConsoles.GAME_HAT);
     }
 }

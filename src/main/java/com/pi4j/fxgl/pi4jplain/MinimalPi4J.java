@@ -4,29 +4,30 @@ import java.time.Duration;
 
 import com.pi4j.Pi4J;
 import com.pi4j.io.gpio.digital.DigitalInput;
-import com.pi4j.io.gpio.digital.DigitalState;
 import com.pi4j.io.gpio.digital.PullResistance;
 import com.pi4j.library.pigpio.PiGpio;
 import com.pi4j.plugin.pigpio.provider.gpio.digital.PiGpioDigitalInputProvider;
 import com.pi4j.plugin.raspberrypi.platform.RaspberryPiPlatform;
-import com.pi4j.util.Console;
 
 /**
+ * Minimal Example for accessing a Button via Pi4J.
+ *
+ * The arcade consoles typically have just a number of buttons attached to the GPIO of
+ * Raspberry Pi, no LED or LCD displays for example.
+ *
+ * In a RaspPi terminal the command  'gpio readall' will give you all the pin numbers in the different numbering schemes.
+ *
+ * In Pi4J BCM numbering scheme is used as default.
+ *
+ * Slightly modified example provided by Frank Delporte.
+ *
  * @author Dieter Holz
  */
 public class MinimalPi4J {
-    private static final int PIN_BUTTON = 24; // PIN 18 = BCM 24
-
-    private static int pressCount = 0;
+    private static final int PIN_BUTTON = 24;  // PIN 18 = BCM 24, START-Button of Picade
+    //private static final int PIN_BUTTON = 21; // PIN 40 = BCM 21, START-Button of GameHAT
 
     public static void main(String[] args) throws Exception {
-        // Create Pi4J console wrapper/helper
-        // (This is a utility class to abstract some of the boilerplate stdin/stdout code)
-        final var console = new Console();
-
-        // Print program title/header
-        console.title("<-- The Pi4J Project -->", "Minimal Example for accessing arcade consoles");
-
         // ------------------------------------------------------------
         // Initialize the Pi4J Runtime Context
         // ------------------------------------------------------------
@@ -34,16 +35,19 @@ public class MinimalPi4J {
         // context.
         //
         // The 'Pi4J' static class includes a few helper context
-        // creators for the most common use cases.  The 'newAutoContext()'
-        // method will automatically load all available Pi4J
+        // creators for the most common use cases.
+        //
+        // 'newAutoContext()' will automatically load all available Pi4J
         // extensions found in the application's classpath which
         // may include 'Platforms' and 'I/O Providers'
 
-        // to get the default context you can use:
+        // to get this default context you can use:
+
         // var pi4j = Pi4J.newAutoContext();
 
-        // In our context of gaining access to the physical buttons and joystick of arcade consoles
-        // we only need access to the digital input. There's no output, no I2C, no ...
+        // In our context of gaining access arcade consoles
+        // we typically need access to the digital input, only. There's no output, no I2C, no ...
+        // To get this minimal context:
 
         final var piGpio = PiGpio.newNativeInstance();
 
@@ -60,27 +64,35 @@ public class MinimalPi4J {
                              .build();
 
         // Here we will create I/O interfaces for a (GPIO) digital input pin.
-
-        var buttonConfig = DigitalInput.newConfigBuilder(pi4j)
+        final var buttonConfig = DigitalInput.newConfigBuilder(pi4j)
                                        .id("BCM_" + PIN_BUTTON)
                                        .name("Button")
                                        .address(PIN_BUTTON)
                                        .pull(PullResistance.PULL_DOWN)
                                        .debounce(10_000L)
-                                       .provider("pigpio-digital-input");
+                                       .build();  //don't forget to build the config
+
+        //create a DigitalInput for the given buttonConfig
         final var button = pi4j.create(buttonConfig);
 
         // specify some action, that will be triggered whenever the button's state changed
         button.addListener(e -> {
-            if (e.state() == DigitalState.LOW) {
-                pressCount++;
-                console.println("Button was pressed for the " + pressCount + "th time");
-            } else {
-                console.println("Button was depressed");
+            switch (e.state()){
+                case HIGH:
+                    System.out.println("Button was pressed!");
+                    break;
+                case LOW:
+                    System.out.println("Button was depressed!");
+                    break;
+                case UNKNOWN:
+                    System.out.println("Something unknown happened!!");
+                    break;
+                default:
+                    System.out.println("if something else happens, it's a bug in Pi4J, this is the state '" + e.state() + "'");
             }
         });
 
-        console.println("Press the button to see it in action!");
+        System.out.println("Press the button to see it in action!");
 
         // Wait for 15 seconds while handling events before exiting
         delay(Duration.ofSeconds(15));
@@ -88,15 +100,14 @@ public class MinimalPi4J {
         // ------------------------------------------------------------
         // Terminate the Pi4J library
         // ------------------------------------------------------------
-        // We we are all done and want to exit our application, we must
-        // call the 'shutdown()' function on the Pi4J static helper class.
-        // This will ensure that all I/O instances are properly shutdown,
+        // We are all done and want to exit our application, we must
+        // call the 'shutdown()' on the Pi4J static helper class.
+        // This will ensure that all I/O instances are
         // released by the the system and shutdown in the appropriate
-        // manner. Terminate will also ensure that any background
+        // manner. It will also ensure that any background
         // threads/processes are cleanly shutdown and any used memory
         // is returned to the system.
 
-        // Shutdown Pi4J
         pi4j.shutdown();
     }
 
