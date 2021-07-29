@@ -14,10 +14,11 @@
     <properties>
         <!-- The class that will be started  -->
 
-             <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.game.DropApp</launcher.class>
+        <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.game.DropApp</launcher.class>
         <!-- <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.jfxplain.tools.FrameRateTest</launcher.class> -->
-        <!-- <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.jfxplain.tools.HelloFX</launcher.class>       -->    
-        <!-- <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.jfxplain.arcadefx.PicadeFX</launcher.class>   -->
+        <!--  <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.jfxplain.tools.HelloFX</launcher.class>  -->
+        <!--  <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.jfxplain.tools.MediaTest</launcher.class> -->
+        <!-- <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.jfxplain.arcadefx.PicadeFX</launcher.class>-->
         <!-- <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.jfxplain.arcadefx.GameHAT_FX</launcher.class> -->
         <!-- <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.pi4jplain.MinimalPi4J</launcher.class>        -->
         <!-- <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.pi4jplain.PinChecker</launcher.class>         -->
@@ -26,8 +27,7 @@
 
         <!-- Setup for the RaspPi -->
         <pi.username>pi</pi.username>
-        <pi.password>pi</pi.password>
-        <pi.card>card1</pi.card>
+        <pi.password>crowpi</pi.password>
         <pi.ipnumber/>
         <pi.port>22</pi.port>
         <pi.deploydirectory>/home/pi/deploy</pi.deploydirectory>
@@ -36,8 +36,8 @@
         <java.version>11</java.version>
 
         <!-- Project Dependency Versions-->
-        <fxgl.version>11.16</fxgl.version>
-        <javafx.version>17-ea+15</javafx.version>
+        <fxgl.version>dev-SNAPSHOT</fxgl.version>
+        <javafx.version>17-ea+16</javafx.version>
         <pi4j.version>2.0-SNAPSHOT</pi4j.version>
 
         <slf4j.version>1.7.32</slf4j.version>
@@ -124,10 +124,6 @@
                     <groupId>org.openjfx</groupId>
                     <artifactId>*</artifactId>
                 </exclusion>
-                <exclusion>
-                    <groupId>org.apache.logging.log4j</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
             </exclusions>
         </dependency>
 
@@ -138,12 +134,6 @@
             <groupId>com.pi4j</groupId>
             <artifactId>pi4j-core</artifactId>
             <version>${pi4j.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.logging.log4j</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <!-- Pi4J Raspberry Pi Platform -->
@@ -151,12 +141,6 @@
             <groupId>com.pi4j</groupId>
             <artifactId>pi4j-plugin-raspberrypi</artifactId>
             <version>${pi4j.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.logging.log4j</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <!-- Pi4J Raspberry Pi GPIO -->
@@ -164,12 +148,6 @@
             <groupId>com.pi4j</groupId>
             <artifactId>pi4j-plugin-pigpio</artifactId>
             <version>${pi4j.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.logging.log4j</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <!-- Pi4J Mock Platform -->
@@ -177,17 +155,11 @@
             <groupId>com.pi4j</groupId>
             <artifactId>pi4j-plugin-mock</artifactId>
             <version>${pi4j.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.logging.log4j</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
             <!-- <scope>test</scope> -->
         </dependency>
 
-        <!-- SLF4J API -->
-        <!--
+        <!-- SLF4J  -->
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -196,15 +168,18 @@
 
         <dependency>
             <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+
+        <!--
+        <dependency>
+            <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
 -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
+
 
         <!-- JUnit -->
         <dependency>
@@ -296,6 +271,11 @@
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>true</overWriteSnapshots>
                             <overWriteIfNewer>true</overWriteIfNewer>
+                            <!--
+                            On the Raspberry Pi we use specific JavaFX dependencies,
+                            so we exclude them here and they are added in the run-script.
+                            -->
+                            <excludeGroupIds>org.openjfx</excludeGroupIds>
                         </configuration>
                     </execution>
                 </executions>
@@ -397,7 +377,7 @@
                                         <sshexec host="${pi.ipnumber}" port="${pi.port}"
                                                  username="${pi.username}" password="${pi.password}" trust="true"
                                                  failonerror="false" usepty="true" useSystemIn="true"
-                                                 command="sudo  java-kiosk -Degl.displayid=/dev/dri/${pi.card} --module-path ${pi.deploydirectory} --module ${launcher.class}"/>
+                                                 command="sudo  java-kiosk -Xmx1G --module-path ${pi.deploydirectory} --module ${launcher.class} "/>
                                     </target>
                                 </configuration>
                             </execution>
@@ -448,7 +428,7 @@
                                         <sshexec host="${pi.ipnumber}" port="${pi.port}"
                                                  username="${pi.username}" password="${pi.password}" trust="true"
                                                  failonerror="false" usepty="true" useSystemIn="true"
-                                                 command="DISPLAY=:0 XAUTHORITY=/home/pi/.Xauthority sudo -E java --module-path /opt/javafx-sdk-17/lib:${pi.deploydirectory} --add-modules javafx.controls -Dprism.forceGPU=true -Dprism.verbose=true --module ${launcher.class}"/>
+                                                 command="DISPLAY=:0 XAUTHORITY=/home/pi/.Xauthority sudo -E /home/pi/jdk-16.0.2-full/bin/java --module-path ${pi.deploydirectory} --add-modules javafx.controls,javafx.media  --module ${launcher.class}"/>
                                     </target>
                                 </configuration>
                             </execution>

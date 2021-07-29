@@ -12,7 +12,6 @@ import com.pi4j.fxgl.jfxplain.arcadefx.gui.GUI;
 import com.pi4j.fxgl.jfxplain.arcadefx.model.AppModel;
 import com.pi4j.fxgl.jfxplain.arcadefx.pui.PicadeUI;
 import com.pi4j.fxgl.util.ArcadeConsoles;
-import com.pi4j.fxgl.util.Pi4JContext;
 
 /**
  * @author Dieter Holz
@@ -42,17 +41,7 @@ public class PicadeFX extends Application {
         new PicadeUI(model);
     }
 
-//    @Override
-//    public void stop()  {
-//        logger.info("Stop App");
-//        Pi4JContext.shutdown();
-//    }
-
     public static void main(String[] args) {
-//   		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-//            logger.info("Shutdown App");
-//            Pi4JContext.shutdown();
-//        }));
         launch(args);
    	}
 }

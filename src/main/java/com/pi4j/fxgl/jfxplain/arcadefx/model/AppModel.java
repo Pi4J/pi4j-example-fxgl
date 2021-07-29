@@ -4,6 +4,8 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.media.AudioClip;
+import javafx.scene.media.MediaPlayer;
 
 /**
  * @author Dieter Holz
@@ -15,9 +17,17 @@ public class AppModel {
     private final IntegerProperty dukePositionX = new SimpleIntegerProperty();
     private final IntegerProperty dukePositionY = new SimpleIntegerProperty();
 
+    private AudioClip buzzer = new AudioClip(getClass().getResource("/assets/sounds/drop.wav").toExternalForm());
+
+    public void playSound(){
+        buzzer.stop();
+        buzzer.play();
+    }
+
     // all getter and setter methods (nothing special)
     public void increaseCounter() {
         counter.setValue(counter.get() + 1);
+        playSound();
     }
 
     public void decreaseCounter() {
