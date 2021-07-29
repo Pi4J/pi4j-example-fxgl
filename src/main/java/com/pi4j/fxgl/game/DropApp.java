@@ -15,6 +15,7 @@ import javafx.util.Duration;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.core.math.FXGLMath;
+
 import com.almasb.fxgl.dsl.components.OffscreenCleanComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.pi4j.fxgl.util.ArcadeConsoles;
@@ -28,7 +29,9 @@ import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.onCollisionBegin;
 import static com.almasb.fxgl.dsl.FXGL.onKey;
 import static com.almasb.fxgl.dsl.FXGL.run;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getInput;
+import static com.almasb.fxgl.dsl.FXGL.getInput;
+import static com.almasb.fxgl.dsl.FXGL.play;
+import static com.almasb.fxgl.dsl.FXGL.loopBGM;
 
 /**
  * This is an FXGL version of the libGDX simple game tutorial, which can be found
@@ -45,6 +48,9 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getInput;
  * for following the code.
  *
  * @author Almas Baimagambetov (AlmasB) (almaslvl@gmail.com)
+ *
+ * For Picade additions
+ * @author Dieter Holz
  */
 public class DropApp extends GameApplication {
 
