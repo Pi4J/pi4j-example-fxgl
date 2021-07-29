@@ -9,15 +9,16 @@ package com.pi4j.fxgl.game;
 import java.util.Map;
 
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.util.Duration;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.core.math.FXGLMath;
+import com.almasb.fxgl.dsl.components.OffscreenCleanComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.pi4j.fxgl.util.ArcadeConsoles;
 import com.pi4j.fxgl.util.ArcadeToFXGLBridge;
-import com.pi4j.fxgl.util.HardwareButton;
 import com.pi4j.fxgl.util.PicadeButton;
 
 import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
@@ -28,9 +29,6 @@ import static com.almasb.fxgl.dsl.FXGL.onCollisionBegin;
 import static com.almasb.fxgl.dsl.FXGL.onKey;
 import static com.almasb.fxgl.dsl.FXGL.run;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getInput;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.loopBGM;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.play;
-// NOTE: this import above is crucial, it pulls in many useful methods
 
 /**
  * This is an FXGL version of the libGDX simple game tutorial, which can be found
@@ -64,22 +62,24 @@ public class DropApp extends GameApplication {
         settings.setVersion("1.0");
         settings.setWidth(ArcadeConsoles.PICADE.getWidth());
         settings.setHeight(ArcadeConsoles.PICADE.getHeight());
+
+        settings.setProfilingEnabled(true);
     }
 
     @Override
     protected void initGame() {
+        // Picade addition: initial the Arcade console to get access to the Joystick and the physical buttons
+        PicadeButton.initializeAll();
+
         spawnBucket();
 
         // creates a timer that runs spawnDroplet() every second
-        run(() -> spawnDroplet(), Duration.seconds(1));
+        run(this::spawnDroplet, Duration.seconds(1));
 
         // loop background music located in /resources/assets/music/
 
         // currently not working on pi
         //loopBGM("bgm.mp3");
-
-        // initial the Arcade console to get access to the Joystick and the physical buttons
-        PicadeButton.initializeAll();
     }
 
     @Override
@@ -92,7 +92,8 @@ public class DropApp extends GameApplication {
             droplet.removeFromWorld();
 
             // play a sound effect located in /resources/assets/sounds/
-            play("drop.wav");
+            // currently not working on pi
+            //play("drop.wav");
         });
     }
 
@@ -132,20 +133,19 @@ public class DropApp extends GameApplication {
         onKey(KeyCode.RIGHT, () -> bucket.setX(bucket.getX() + 5));
 
 
-        // As a last step attach the Arcade console to the bucket
+        // Picade addition: As a last step attach the Arcade console to the bucket
         PicadeButton.JOYSTICK.xProperty().bindBidirectional(bucket.xProperty());
 
         ArcadeToFXGLBridge.bridge(Map.of(PicadeButton.Button_1, KeyCode.LEFT,
-                                         PicadeButton.Button_2, KeyCode.RIGHT,
-                                         PicadeButton.ESCAPE,   KeyCode.ESCAPE
+                                         PicadeButton.Button_2, KeyCode.RIGHT
                                         ));
+
 //        ArcadeToFXGLBridge.mapButtonToKeyCode(PicadeButton.Button_1, KeyCode.LEFT);
-//        ArcadeToFXGLBridge.mapButtonToKeyCode(PicadeButton.Button_2, KeyCode.RIGHT);
 //        ArcadeToFXGLBridge.mapButtonToKeyCode(PicadeButton.Button_2, KeyCode.RIGHT);
     }
 
     /**
-     * this is done often
+     * this is done often (every second, see initGame)
      */
     private void spawnDroplet() {
         entityBuilder()
@@ -153,6 +153,7 @@ public class DropApp extends GameApplication {
                 .at(FXGLMath.random(0, getAppWidth() - 64), 0)
                 .viewWithBBox("droplet.png")
                 .collidable()
+                .with(new OffscreenCleanComponent()) //clean up when droplet disappears
                 .buildAndAttach();
     }
 

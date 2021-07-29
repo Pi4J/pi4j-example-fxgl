@@ -7,7 +7,7 @@
           <option name="checksumPolicy" value="NOT_SET" />
           <option name="failureBehavior" value="NOT_SET" />
           <option name="localRepository" value="" />
-          <option name="mavenHome" value="/usr/local/Cellar/maven/3.6.3/libexec" />
+          <option name="mavenHome" value="/usr/local/Cellar/maven/3.8.1/libexec" />
           <option name="nonRecursive" value="false" />
           <option name="outputLevel" value="INFO" />
           <option name="pluginUpdatePolicy" value="DEFAULT" />

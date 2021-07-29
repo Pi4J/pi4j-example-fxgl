@@ -14,8 +14,10 @@ open module com.pi4j.fxgl {
 
     requires org.slf4j;
 
+
     // JavaFX
     requires javafx.controls;
+    requires javafx.media;
 
     // FXGL
     requires com.almasb.fxgl.all;
@@ -23,5 +25,5 @@ open module com.pi4j.fxgl {
     // Module Exports
 
     // allow access to classes in the following namespaces for Pi4J annotation processing
-    //exports com.pi4j.fxgl to com.almasb.fxgl.core;
+    //exports com.pi4j.fxgl.game to com.almasb.fxgl.core;
 }

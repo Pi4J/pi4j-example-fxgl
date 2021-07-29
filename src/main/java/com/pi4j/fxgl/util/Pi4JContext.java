@@ -4,6 +4,9 @@ import java.time.Duration;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pi4j.Pi4J;
 import com.pi4j.context.Context;
 import com.pi4j.io.gpio.digital.DigitalInput;
@@ -23,9 +26,20 @@ import com.pi4j.plugin.pigpio.provider.gpio.digital.PiGpioDigitalInputProvider;
 import com.pi4j.plugin.raspberrypi.platform.RaspberryPiPlatform;
 
 /**
+ * This Pi4JContext is made for FXGL games running on arcade consoles.
+ *
+ * FXGL games need to run on desktop (at least for development) and on Raspberry Pi.
+ *
+ * In desktop environment the Pi4J MockPlatform is used, on Raspberry Pi the Pi4J RaspberryPiPlatform.
+ *
+ * Typically arcade consoles just provide some DigitalInput.
+ *
  * @author Dieter Holz
  */
 public class Pi4JContext {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Pi4JContext.class);
+
     private static final Context INSTANCE = buildNewContext();
 
     /**
@@ -34,21 +48,53 @@ public class Pi4JContext {
     private static final long DEBOUNCE = 10_000L;
 
     private Pi4JContext() {
+
     }
 
+    /**
+     * DigitalInputs are needed get access to arcade buttons from your Java app.
+     *
+     * @param bcmPin the pin in bcm numbering scheme
+     * @param label the label of the button
+     *
+     * @return DigitalInput to access the arcade button at bcmPin
+     */
     public static DigitalInput createDigitalInput(int bcmPin, String label) {
         return INSTANCE.create(buildDigitalInputConfig(bcmPin, label));
     }
 
-    public static void shutdown(){
+    /**
+     * Properly shuts down the Pi4J context.
+     */
+    private static void shutdown() {
         INSTANCE.shutdown();
+        //give it some time (don't know if that's really necessary)
+        delay(Duration.ofMillis(200));
     }
 
+    /**
+     * Creates a new Pi4J Context depending on the machine the app is running.
+     *
+     * @return Context that will be used by this app
+     */
     private static Context buildNewContext() {
-        return runsOnPi() ? createCleanContext() : createMockContext();
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            shutdown();
+            LOGGER.info("GPIO shutdown");
+        }));
+
+        Context context = runsOnPi() ? createContext() : createMockContext();
+        LOGGER.info("GPIO initialized for " + (runsOnPi() ? " RaspPi" : " desktop"));
+
+        return context;
     }
 
-    private static boolean runsOnPi(){
+    /**
+     * Tries to find out whether we are running on desktop or on Raspberry Pi.
+     *
+     * @return true if game is running on Raspberry Pi
+     */
+    private static boolean runsOnPi() {
         String vendor = System.getProperty("java.vendor");
         String osName = System.getProperty("os.name");
         String osArch = System.getProperty("os.arch");
@@ -59,7 +105,12 @@ public class Pi4JContext {
                ("Linux".equals(osName) && piArchs.contains(osArch));
     }
 
-    private static Context createMockContext(){
+    /**
+     * This is needed in 'Desktop Mode' when we don't have a real GPIO
+     *
+     * @return Context that will be used by this app
+     */
+    private static Context createMockContext() {
         return Pi4J.newContextBuilder()
                    .add(new MockPlatform())
                    .add(MockAnalogInputProvider.newInstance(),
@@ -73,42 +124,65 @@ public class Pi4JContext {
                    .build();
     }
 
-    private static Context createCleanContext(){
+    /**
+     * There may be situations where an 'old' Context wasn't properly shutdowned.
+     *
+     * On this old context we call 'shutdown' before creating a new context, that is used by the app.
+     *
+     * @return Context that will be used by this app
+     */
+    private static Context createCleanContext() {
         Context oldContext = createContext();
         oldContext.shutdown();
 
-        delay(Duration.ofMillis(500));
+        delay(Duration.ofMillis(200));
 
         return createContext();
     }
 
-    private static Context createContext(){
+    /**
+     * Create a new Pi4J Context using PiGpio
+     *
+     * @return  Context that will be used by this app
+     */
+    private static Context createContext() {
         // Initialize PiGPIO
         final var piGpio = PiGpio.newNativeInstance();
 
         // Build Pi4J context with this platform and PiGPIO providers
         return Pi4J.newContextBuilder()
-                          .noAutoDetect()
-                          .add(new RaspberryPiPlatform(){
-                              @Override
-                              protected String[] getProviders() {
-                                  return new String[]{};
-                              }
-                          })
-                          .add(PiGpioDigitalInputProvider.newInstance(piGpio))  // on our arcade console we just have digitalInput
-                          .build();
+                   .noAutoDetect()
+                   .add(new RaspberryPiPlatform() {
+                       @Override
+                       protected String[] getProviders() {
+                           return new String[]{};
+                       }
+                   })
+                   .add(PiGpioDigitalInputProvider.newInstance(piGpio))  // on our arcade console we just have digitalInput
+                   .build();
     }
 
-    private static DigitalInputConfig buildDigitalInputConfig(int address, String label) {
+    /**
+     *
+     * @param bcm
+     * @param label
+     * @return
+     */
+    private static DigitalInputConfig buildDigitalInputConfig(int bcm, String label) {
         return DigitalInput.newConfigBuilder(INSTANCE)
-                           .id("BCM_" + address)
+                           .id("BCM_" + bcm)
                            .name(label)
-                           .address(address)
+                           .address(bcm)
                            .debounce(DEBOUNCE)
                            .pull(PullResistance.PULL_UP)
                            .build();
     }
 
+    /**
+     * Just let the current thread sleep for some time.
+     *
+     * @param duration
+     */
     private static void delay(Duration duration) {
         try {
             Thread.sleep(duration.toMillis());

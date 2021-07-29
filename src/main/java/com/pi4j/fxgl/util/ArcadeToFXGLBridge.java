@@ -18,12 +18,15 @@ public class ArcadeToFXGLBridge {
      * @param keyCode
      */
     public static void mapButtonToKeyCode(HardwareButton button, KeyCode keyCode){
+        button.addOnPressed(()  -> getExecutor().startAsyncFX(() -> getInput().mockKeyPress(keyCode)));
         button.addOnReleased(() -> getExecutor().startAsyncFX(() -> getInput().mockKeyRelease(keyCode)));
-        button.addOnPressed(() -> getExecutor().startAsyncFX(() -> getInput().mockKeyPress(keyCode)));
-        button.addWhileDown(() -> getExecutor().startAsyncFX(() -> getInput().mockKeyPress(keyCode)));
     }
 
     public static void bridge(Map<PicadeButton, KeyCode> allMappings) {
         allMappings.forEach(ArcadeToFXGLBridge::mapButtonToKeyCode);
+    }
+
+    public static void mapButtonToAction(PicadeButton button, Runnable action) {
+        button.addOnPressed(() -> getExecutor().startAsyncFX(action));
     }
 }
