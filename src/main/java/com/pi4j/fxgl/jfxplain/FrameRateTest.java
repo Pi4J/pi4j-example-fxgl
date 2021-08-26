@@ -1,4 +1,4 @@
-package com.pi4j.fxgl.jfxplain.tools;
+package com.pi4j.fxgl.jfxplain;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -6,20 +6,19 @@ import java.util.concurrent.TimeUnit;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
- *
- * Just a little tool to measure the frame rate of JavaFX (usually should be 60)
- *
- * Use it if your game lags to assure that it's not a performance problem of JavaFX itself.
- *
- * It's not meant to be any kind of template to start your development.
+ * Initially copied from https://github.com/openjfx/samples/blob/master/CommandLine/Modular/CLI/hellofx/src/hellofx/HelloFX.java
  *
  * @author Dieter Holz
  */

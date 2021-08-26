@@ -1,13 +1,15 @@
-package com.pi4j.fxgl.jfxplain.arcadefx.gui;
+package com.pi4j.fxgl.jfxplain.picadefx.gui;
 
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import com.pi4j.fxgl.jfxplain.arcadefx.model.AppModel;
+import com.pi4j.fxgl.jfxplain.picadefx.model.AppModel;
 
 /**
  * ViewMixin is used to enforce the same structure in all our views of all our apps.
@@ -64,8 +66,8 @@ public class GUI extends VBox implements ViewMixin {
         decreaseButton.setOnAction(actionEvent -> model.decreaseCounter());
 
         setOnMouseMoved(mouseEvent -> {
-            model.setDukePositionX((int) mouseEvent.getX());
-            model.setDukePositionY((int) mouseEvent.getY());
+            model.setDukePositionX((int) (mouseEvent.getX() - dukeSize * 0.5));
+            model.setDukePositionY((int) (mouseEvent.getY() - dukeSize * 0.5));
         });
     }
 
@@ -75,8 +77,8 @@ public class GUI extends VBox implements ViewMixin {
         counterLabel.textProperty().bind(model.counterProperty().asString());
         mousePositionLabel.textProperty().bind(model.dukePositionXProperty().asString().concat(", ").concat(model.dukePositionYProperty()));
 
-        duke.xProperty().bind(model.dukePositionXProperty().subtract(dukeSize * 0.5));
-        duke.yProperty().bind(model.dukePositionYProperty().subtract(dukeSize * 0.5));
+        duke.xProperty().bind(model.dukePositionXProperty());
+        duke.yProperty().bind(model.dukePositionYProperty());
     }
 
 }

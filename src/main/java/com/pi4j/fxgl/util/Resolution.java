@@ -3,14 +3,14 @@ package com.pi4j.fxgl.util;
 /**
  * @author Dieter Holz
  */
-public enum ArcadeConsoles {
-    PICADE(1024, 768),
+public enum Resolution {
+    PICADE(1024, 600),
     GAME_HAT(490, 320);
 
     private final int width;
     private final int height;
 
-    ArcadeConsoles(int width, int height) {
+    Resolution(int width, int height) {
         this.width = width;
         this.height = height;
     }

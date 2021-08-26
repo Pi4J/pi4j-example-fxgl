@@ -1,8 +1,8 @@
-package com.pi4j.fxgl.jfxplain.arcadefx.pui;
+package com.pi4j.fxgl.jfxplain.picadefx.pui;
 
 import java.util.Arrays;
 
-import com.pi4j.fxgl.jfxplain.arcadefx.model.AppModel;
+import com.pi4j.fxgl.jfxplain.picadefx.model.AppModel;
 import com.pi4j.fxgl.util.PicadeButton;
 
 import static com.pi4j.fxgl.util.PicadeButton.Button_1;
@@ -42,7 +42,7 @@ public class PicadeUI extends PUI_Base<AppModel> {
         Arrays.stream(PicadeButton.values())
               .filter(button -> !button.getLabel().startsWith("Joy"))
               .forEach(button -> {
-                  button.addOnPressed(()  -> withModel(() -> model.setMessage("'" + button.getLabel() + "' is pressed")));
+                  button.addOnPressed(() -> withModel(() -> model.setMessage("'" + button.getLabel() + "' is pressed")));
                   button.addOnReleased(() -> withModel(() -> model.setMessage("'" + button.getLabel() + "' is released")));
               });
 
