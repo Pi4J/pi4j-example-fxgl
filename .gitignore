@@ -1,17 +1,7 @@
-# Maven
-/target/
-
-# Eclipse
-.classpath
-.factorypath
-.project
-.settings
-
-# IntelliJ
 /.idea/
-*.iml
-
-# FXGL
-
+/target/
 /system/
 /logs/
+.classpath
+.project
+.settings/
