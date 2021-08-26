@@ -66,7 +66,6 @@ public class FxglExample extends GameApplication {
      */
     private Entity player;
 
-
     /**
      * food object is spawned at random on the map
      */
@@ -134,20 +133,19 @@ public class FxglExample extends GameApplication {
         pi4JFactory.getConsole().println("Init game UI done");
     }
 
-
     /**
      * Input configuration, here you configure all the input events like key presses, mouse clicks, etc.
      */
     @Override
     protected void initInput() {
-        onKeyDown(KeyCode.LEFT, () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
-                SnakeHeadComponent::left));
-        onKeyDown(KeyCode.RIGHT, () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
-                SnakeHeadComponent::right));
-        onKeyDown(KeyCode.UP, () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
-                SnakeHeadComponent::up));
-        onKeyDown(KeyCode.DOWN, () -> player.getComponentOptional(SnakeHeadComponent.class).ifPresent(
-                SnakeHeadComponent::down));
+        onKeyDown(KeyCode.LEFT, () -> player.getComponentOptional(SnakeHeadComponent.class)
+                .ifPresent(SnakeHeadComponent::left));
+        onKeyDown(KeyCode.RIGHT, () -> player.getComponentOptional(SnakeHeadComponent.class)
+                .ifPresent(SnakeHeadComponent::right));
+        onKeyDown(KeyCode.UP, () -> player.getComponentOptional(SnakeHeadComponent.class)
+                .ifPresent(SnakeHeadComponent::up));
+        onKeyDown(KeyCode.DOWN, () -> player.getComponentOptional(SnakeHeadComponent.class)
+                .ifPresent(SnakeHeadComponent::down));
         onKeyDown(KeyCode.F, () -> player.getComponent(SnakeHeadComponent.class).grow());
         onKeyDown(KeyCode.G, () -> player.getComponent(SnakeHeadComponent.class).log());
         pi4JFactory.getConsole().println("Init game inputs done");
