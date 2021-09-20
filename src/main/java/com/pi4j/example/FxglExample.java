@@ -104,8 +104,8 @@ public class FxglExample extends GameApplication {
                 .ifPresent(SnakeHeadComponent::up));
         onKeyDown(KeyCode.DOWN, () -> player.getComponentOptional(SnakeHeadComponent.class)
                 .ifPresent(SnakeHeadComponent::down));
-        onKeyDown(KeyCode.F, () -> player.getComponent(SnakeHeadComponent.class).grow());
-        onKeyDown(KeyCode.G, () -> player.getComponent(SnakeHeadComponent.class).log());
+        onKeyDown(KeyCode.G, () -> player.getComponent(SnakeHeadComponent.class).grow());
+        onKeyDown(KeyCode.L, () -> player.getComponent(SnakeHeadComponent.class).log());
         pi4JFactory.getConsole().println("Init game inputs done");
     }
 

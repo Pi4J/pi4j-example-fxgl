@@ -53,7 +53,7 @@ public class Pi4JFactory {
             initInputGpio(pi4j, "JoystickRight", PIN_JOYSTICK_RIGHT, KeyCode.RIGHT);
 
             // Push button inputs
-            initInputGpio(pi4j, "ButtonFood", PIN_BUTTON_1, KeyCode.F);
+            initInputGpio(pi4j, "GrowButton", PIN_BUTTON_1, KeyCode.G);
         } catch (Exception ex) {
             console.println("Error while initializing Pi4J: " + ex.getMessage());
         }

@@ -72,7 +72,6 @@ This is the list of files created by the build process of this example applicati
 Make the run script executable and start it like this:
 
 ```
-chmod +x run.sh
 sudo ./run.sh
 ```
 
