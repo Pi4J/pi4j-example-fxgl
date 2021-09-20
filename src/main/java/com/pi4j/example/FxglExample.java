@@ -32,6 +32,7 @@ import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.physics.CollisionHandler;
+import com.pi4j.example.FxglExampleFactory.SnakeType;
 import com.pi4j.example.component.SnakeFoodComponent;
 import com.pi4j.example.component.SnakeHeadComponent;
 import com.pi4j.example.util.Pi4JFactory;
@@ -67,11 +68,6 @@ public class FxglExample extends GameApplication {
     private Entity player;
 
     /**
-     * food object is spawned at random on the map
-     */
-    private Entity food;
-
-    /**
      * Main entry point where the application starts.
      *
      * @param args Start-up arguments
@@ -96,44 +92,6 @@ public class FxglExample extends GameApplication {
     }
 
     /**
-     * General game variables. Used to hold the points and lives.
-     *
-     * @param vars The variables of the game which can be further extended here.
-     */
-    @Override
-    protected void initGameVars(Map<String, Object> vars) {
-        vars.put("score", 0);
-        vars.put("lives", 5);
-        pi4JFactory.getConsole().println("Init game vars done");
-    }
-
-    @Override
-    protected void initUI() {
-        Text scoreLabel = getUIFactoryService().newText("Score", Color.BLACK, 22);
-        Text scoreValue = getUIFactoryService().newText("", Color.BLACK, 22);
-        Text livesLabel = getUIFactoryService().newText("Lives", Color.BLACK, 22);
-        Text livesValue = getUIFactoryService().newText("", Color.BLACK, 22);
-
-        scoreLabel.setTranslateX(20);
-        scoreLabel.setTranslateY(20);
-
-        scoreValue.setTranslateX(90);
-        scoreValue.setTranslateY(20);
-
-        livesLabel.setTranslateX(getAppWidth() - 100);
-        livesLabel.setTranslateY(20);
-
-        livesValue.setTranslateX(getAppWidth() - 30);
-        livesValue.setTranslateY(20);
-
-        scoreValue.textProperty().bind(getWorldProperties().intProperty("score").asString());
-        livesValue.textProperty().bind(getWorldProperties().intProperty("lives").asString());
-
-        getGameScene().addUINodes(scoreLabel, scoreValue, livesLabel, livesValue);
-        pi4JFactory.getConsole().println("Init game UI done");
-    }
-
-    /**
      * Input configuration, here you configure all the input events like key presses, mouse clicks, etc.
      */
     @Override
@@ -152,21 +110,34 @@ public class FxglExample extends GameApplication {
     }
 
     /**
+     * General game variables. Used to hold the points and lives.
+     *
+     * @param vars The variables of the game which can be further extended here.
+     */
+    @Override
+    protected void initGameVars(Map<String, Object> vars) {
+        vars.put("score", 0);
+        vars.put("lives", 5);
+        pi4JFactory.getConsole().println("Init game vars done");
+    }
+
+    /**
      * Initialization of the game by providing the {@link EntityFactory}.
      */
     @Override
     protected void initGame() {
         getGameWorld().addEntityFactory(gameFactory);
         player = spawn("snakeHead", 0, 0);
-        food = spawn("snakeFood", 0, 0);
+        spawn("snakeFood", 0, 0);
         pi4JFactory.getConsole().println("Init game done");
     }
 
+    /**
+     * Initialization of the game physics
+     */
     @Override
     protected void initPhysics() {
-
         getPhysicsWorld().addCollisionHandler(new CollisionHandler(SnakeType.SNAKE_HEAD, SnakeType.SNAKE_FOOD) {
-
             // order of types is the same as passed into the constructor
             @Override
             protected void onCollisionBegin(Entity player, Entity food) {
@@ -175,5 +146,34 @@ public class FxglExample extends GameApplication {
             }
         });
         pi4JFactory.getConsole().println("Init physics done");
+    }
+
+    /**
+     * Initialization of the user interface
+     */
+    @Override
+    protected void initUI() {
+        Text scoreLabel = getUIFactoryService().newText("Score", Color.BLACK, 22);
+        Text scoreValue = getUIFactoryService().newText("", Color.BLACK, 22);
+        Text livesLabel = getUIFactoryService().newText("Lives", Color.BLACK, 22);
+        Text livesValue = getUIFactoryService().newText("", Color.BLACK, 22);
+
+        scoreLabel.setTranslateX(20);
+        scoreLabel.setTranslateY(20);
+
+        scoreValue.setTranslateX(90);
+        scoreValue.setTranslateY(20);
+
+        livesLabel.setTranslateX(getAppWidth() - 100D);
+        livesLabel.setTranslateY(20);
+
+        livesValue.setTranslateX(getAppWidth() - 30D);
+        livesValue.setTranslateY(20);
+
+        scoreValue.textProperty().bind(getWorldProperties().intProperty("score").asString());
+        livesValue.textProperty().bind(getWorldProperties().intProperty("lives").asString());
+
+        getGameScene().addUINodes(scoreLabel, scoreValue, livesLabel, livesValue);
+        pi4JFactory.getConsole().println("Init game UI done");
     }
 }

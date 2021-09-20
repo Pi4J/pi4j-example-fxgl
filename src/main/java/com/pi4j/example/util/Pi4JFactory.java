@@ -26,7 +26,6 @@ public class Pi4JFactory {
 
     public Pi4JFactory() {
         console = new Console();
-
         try {
             pi4j = Pi4J.newAutoContext();
             initInputGpios();
@@ -60,7 +59,7 @@ public class Pi4JFactory {
         }
     }
 
-    private void initInputGpio(Context pi4j, String id, int bcm, KeyCode keyCode) throws Exception {
+    private void initInputGpio(Context pi4j, String id, int bcm, KeyCode keyCode) {
         var input = pi4j.create(DigitalInput.newConfigBuilder(pi4j)
                 .id(id)
                 .address(bcm)
@@ -75,6 +74,5 @@ public class Pi4JFactory {
                 getExecutor().startAsyncFX(() -> getInput().mockKeyRelease(keyCode));
             }
         });
-
     }
 }

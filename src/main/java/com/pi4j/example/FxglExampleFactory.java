@@ -22,12 +22,16 @@ import static com.almasb.fxgl.dsl.FXGL.texture;
  */
 public class FxglExampleFactory implements EntityFactory {
 
+    public enum SnakeType {
+        SNAKE_HEAD, SNAKE_BODY, SNAKE_FOOD
+    }
+
     public static final int GRID_SIZE = 32;
 
     /**
      * List of images to select for random body elements
      */
-    private List<String> snakeBodyTextureNames = List.of(
+    private final List<String> snakeBodyTextureNames = List.of(
             "angry.png",
             "cool.png",
             "crying.png",
@@ -43,7 +47,7 @@ public class FxglExampleFactory implements EntityFactory {
             "wink.png"
     );
 
-    private List<String> snakeFoodTextureNames = List.of(
+    private final List<String> snakeFoodTextureNames = List.of(
             "apple.png"
     );
 

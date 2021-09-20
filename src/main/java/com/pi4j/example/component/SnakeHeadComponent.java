@@ -12,32 +12,31 @@ import static com.pi4j.example.FxglExampleFactory.GRID_SIZE;
 
 public class SnakeHeadComponent extends Component {
 
+    private static final String PROP_PREVIOUS_POSITION = "prevPos";
+
     private Point2D direction = new Point2D(1, 0);
 
     // head - body - ...
-    private List<Entity> bodyParts = new ArrayList<>();
+    private final List<Entity> bodyParts = new ArrayList<>();
 
     @Override
     public void onAdded() {
         bodyParts.add(entity);
-
-        entity.setProperty("prevPos", entity.getPosition());
+        entity.setProperty(PROP_PREVIOUS_POSITION, entity.getPosition());
     }
 
     @Override
     public void onUpdate(double tpf) {
-        entity.setProperty("prevPos", entity.getPosition());
+        entity.setProperty(PROP_PREVIOUS_POSITION, entity.getPosition());
         entity.translate(direction.multiply(GRID_SIZE));
-
-
 
         for (int i = 1; i < bodyParts.size(); i++) {
             var prevPart = bodyParts.get(i - 1);
             var part = bodyParts.get(i);
 
-            Point2D prevPos = prevPart.getObject("prevPos");
+            Point2D prevPos = prevPart.getObject(PROP_PREVIOUS_POSITION);
 
-            part.setProperty("prevPos", part.getPosition());
+            part.setProperty(PROP_PREVIOUS_POSITION, part.getPosition());
             part.setPosition(prevPos);
         }
 
@@ -45,19 +44,19 @@ public class SnakeHeadComponent extends Component {
     }
 
     private void checkForCollision() {
-        if (entity.getX() < 0)
+        if (entity.getX() < 0) {
             die();
-
-        if (entity.getX() >= getAppWidth())
+        }
+        if (entity.getX() >= getAppWidth()) {
             die();
-
-        if (entity.getY() < 0)
+        }
+        if (entity.getY() < 0) {
             die();
-
-        if (entity.getY() >= getAppHeight())
+        }
+        if (entity.getY() >= getAppHeight()) {
             die();
-
-        for(int i=1; i<bodyParts.size(); i++) {
+        }
+        for (int i = 1; i < bodyParts.size(); i++) {
             if (entity.getPosition().equals(bodyParts.get(i).getPosition())) {
                 die();
             }
@@ -68,8 +67,8 @@ public class SnakeHeadComponent extends Component {
         inc("lives", -1);
 
         if (geti("lives") <= 0) {
-            getDialogService().showMessageBox("Game Over", 
-            () -> getGameController().startNewGame());
+            getDialogService().showMessageBox("Game Over",
+                    () -> getGameController().startNewGame());
             return;
         }
 
@@ -106,17 +105,17 @@ public class SnakeHeadComponent extends Component {
 
         var lastBodyPart = bodyParts.get(bodyParts.size() - 1);
 
-        Point2D pos = lastBodyPart.getObject("prevPos");
+        Point2D pos = lastBodyPart.getObject(PROP_PREVIOUS_POSITION);
 
         var body = spawn("snakeBody", pos);
-        body.setProperty("prevPos", pos);
+        body.setProperty(PROP_PREVIOUS_POSITION, pos);
         bodyParts.add(body);
     }
 
     public void log() {
         bodyParts.forEach(part -> {
             System.out.println(part.getPosition());
-            System.out.println(part.getObject("prevPos").toString());
+            System.out.println(part.getObject(PROP_PREVIOUS_POSITION).toString());
         });
     }
 }
