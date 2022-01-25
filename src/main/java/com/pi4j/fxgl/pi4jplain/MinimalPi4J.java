@@ -21,7 +21,6 @@ import com.pi4j.plugin.raspberrypi.platform.RaspberryPiPlatform;
  *
  * Slightly modified example provided by Frank Delporte.
  *
- * @author Dieter Holz
  */
 public class MinimalPi4J {
     private static final int PIN_BUTTON = 24;  // PIN 18 = BCM 24, START-Button of Picade
@@ -68,7 +67,7 @@ public class MinimalPi4J {
                                        .id("BCM_" + PIN_BUTTON)
                                        .name("Button")
                                        .address(PIN_BUTTON)
-                                       .pull(PullResistance.PULL_DOWN)
+                                       .pull(PullResistance.PULL_UP)
                                        .debounce(10_000L)
                                        .build();  //don't forget to build the config
 
@@ -79,10 +78,10 @@ public class MinimalPi4J {
         button.addListener(e -> {
             switch (e.state()){
                 case HIGH:
-                    System.out.println("Button was pressed!");
+                    System.out.println("Button was depressed!");
                     break;
                 case LOW:
-                    System.out.println("Button was depressed!");
+                    System.out.println("Button was pressed!");
                     break;
                 case UNKNOWN:
                     System.out.println("Something unknown happened!!");

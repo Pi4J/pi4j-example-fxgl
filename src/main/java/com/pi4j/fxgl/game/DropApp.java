@@ -9,7 +9,6 @@ package com.pi4j.fxgl.game;
 import java.util.Map;
 
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.util.Duration;
 
 import com.almasb.fxgl.app.GameApplication;
@@ -30,8 +29,6 @@ import static com.almasb.fxgl.dsl.FXGL.onCollisionBegin;
 import static com.almasb.fxgl.dsl.FXGL.onKey;
 import static com.almasb.fxgl.dsl.FXGL.run;
 import static com.almasb.fxgl.dsl.FXGL.getInput;
-import static com.almasb.fxgl.dsl.FXGL.play;
-import static com.almasb.fxgl.dsl.FXGL.loopBGM;
 
 /**
  * This is an FXGL version of the libGDX simple game tutorial, which can be found
@@ -69,7 +66,8 @@ public class DropApp extends GameApplication {
         settings.setWidth(ArcadeConsoles.PICADE.getWidth());
         settings.setHeight(ArcadeConsoles.PICADE.getHeight());
 
-        settings.setProfilingEnabled(true);
+        //use this to get some profiling information
+        //settings.setProfilingEnabled(true);
     }
 
     @Override
@@ -83,7 +81,6 @@ public class DropApp extends GameApplication {
         run(this::spawnDroplet, Duration.seconds(1));
 
         // loop background music located in /resources/assets/music/
-
         // currently not working on pi
         //loopBGM("bgm.mp3");
     }
@@ -135,6 +132,7 @@ public class DropApp extends GameApplication {
         // bind bucket's X value to mouse X
         getInput().mouseXWorldProperty().addListener((observableValue, number, t1) -> bucket.setX(t1.doubleValue()));
 
+        // bind cursor buttons to move the bucket
         onKey(KeyCode.LEFT,  () -> bucket.setX(bucket.getX() - 5));
         onKey(KeyCode.RIGHT, () -> bucket.setX(bucket.getX() + 5));
 

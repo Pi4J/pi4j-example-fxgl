@@ -145,10 +145,10 @@ public class MazelaManApp extends GameApplication {
 
     @Override
     protected void initInput() {
-        FXGL.onKey(KeyCode.A, "Move Left", () -> getPlayer().getComponent(PlayerComponent.class).left());
+        FXGL.onKey(KeyCode.A, "Move Left",  () -> getPlayer().getComponent(PlayerComponent.class).left());
         FXGL.onKey(KeyCode.D, "Move Right", () -> getPlayer().getComponent(PlayerComponent.class).right());
-        FXGL.onKey(KeyCode.W, "Move Up", () -> getPlayer().getComponent(PlayerComponent.class).up());
-        FXGL.onKey(KeyCode.S, "Move Down", () -> getPlayer().getComponent(PlayerComponent.class).down());
+        FXGL.onKey(KeyCode.W, "Move Up",    () -> getPlayer().getComponent(PlayerComponent.class).up());
+        FXGL.onKey(KeyCode.S, "Move Down",  () -> getPlayer().getComponent(PlayerComponent.class).down());
     }
 
     private static Entity getPlayer() {

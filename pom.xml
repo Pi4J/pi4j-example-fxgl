@@ -14,20 +14,20 @@
     <properties>
         <!-- The class that will be started  -->
 
-        <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.game.DropApp</launcher.class>
+        <!--  <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.game.DropApp</launcher.class> -->
         <!-- <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.jfxplain.tools.FrameRateTest</launcher.class> -->
         <!--  <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.jfxplain.tools.HelloFX</launcher.class>  -->
         <!--  <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.jfxplain.tools.MediaTest</launcher.class> -->
         <!-- <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.jfxplain.arcadefx.PicadeFX</launcher.class>-->
         <!-- <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.jfxplain.arcadefx.GameHAT_FX</launcher.class> -->
-        <!-- <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.pi4jplain.MinimalPi4J</launcher.class>        -->
-        <!-- <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.pi4jplain.PinChecker</launcher.class>         -->
+        <!-- <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.pi4jplain.MinimalPi4J</launcher.class> -->
+        <launcher.class>com.pi4j.fxgl/com.pi4j.fxgl.pi4jplain.PinChecker</launcher.class>
 
         <fxgl.launcher.args/>
 
         <!-- Setup for the RaspPi -->
         <pi.username>pi</pi.username>
-        <pi.password>crowpi</pi.password>
+        <pi.password>picade</pi.password>
         <pi.ipnumber/>
         <pi.port>22</pi.port>
         <pi.deploydirectory>/home/pi/deploy</pi.deploydirectory>
@@ -37,15 +37,15 @@
 
         <!-- Project Dependency Versions-->
         <fxgl.version>dev-SNAPSHOT</fxgl.version>
-        <javafx.version>17-ea+16</javafx.version>
-        <pi4j.version>2.0-SNAPSHOT</pi4j.version>
+        <javafx.version>17</javafx.version>
+        <pi4j.version>2.0</pi4j.version>
 
         <slf4j.version>1.7.32</slf4j.version>
         <junit.version>5.7.2</junit.version>
 
         <!-- Plugin Versions-->
-        <javafx.plugin.version>0.0.6</javafx.plugin.version>
-        <gluonfx.plugin.version>1.0.3</gluonfx.plugin.version>
+        <javafx.plugin.version>0.0.7</javafx.plugin.version>
+        <gluonfx.plugin.version>1.0.5</gluonfx.plugin.version>
         <gluonfx.target/>
 
         <!-- Maven Plugin Versions -->
@@ -377,7 +377,7 @@
                                         <sshexec host="${pi.ipnumber}" port="${pi.port}"
                                                  username="${pi.username}" password="${pi.password}" trust="true"
                                                  failonerror="false" usepty="true" useSystemIn="true"
-                                                 command="sudo  java-kiosk -Xmx1G --module-path ${pi.deploydirectory} --module ${launcher.class} "/>
+                                                 command="sudo  java-kiosk --module-path ${pi.deploydirectory} --module ${launcher.class} "/>
                                     </target>
                                 </configuration>
                             </execution>
@@ -428,7 +428,8 @@
                                         <sshexec host="${pi.ipnumber}" port="${pi.port}"
                                                  username="${pi.username}" password="${pi.password}" trust="true"
                                                  failonerror="false" usepty="true" useSystemIn="true"
-                                                 command="DISPLAY=:0 XAUTHORITY=/home/pi/.Xauthority sudo -E /home/pi/jdk-16.0.2-full/bin/java --module-path ${pi.deploydirectory} --add-modules javafx.controls,javafx.media  --module ${launcher.class}"/>
+                                                 command="DISPLAY=:0 XAUTHORITY=/home/pi/.Xauthority sudo -E java --module-path /opt/javafx-sdk-17/lib:${pi.deploydirectory} --add-modules javafx.controls -Dglass.monocle=X11  -Dprism.verbose=true --module ${launcher.class}"/>
+
                                     </target>
                                 </configuration>
                             </execution>
