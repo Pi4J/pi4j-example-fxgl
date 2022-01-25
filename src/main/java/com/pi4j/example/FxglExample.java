@@ -88,6 +88,7 @@ public class FxglExample extends GameApplication {
         settings.setHeight(GRID_SIZE * 30);
         settings.setTitle("FXGL Snake Game");
         settings.setTicksPerSecond(10);
+        settings.setProfilingEnabled(true);
         pi4JFactory.getConsole().println("Init game settings done");
     }
 

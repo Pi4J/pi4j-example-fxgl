@@ -10,27 +10,75 @@
     <description>Pi4J Sample Code</description>
     <version>0.0.1</version>
 
+
     <!-- BUILD PROPERTIES -->
     <properties>
-        <!-- PROJECT ENCODING PROPERTIES -->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- The class that will be started, choose one and only one -->
 
-        <!-- JAVA COMPILER VERSIONS -->
-        <java.version>11</java.version>
+        <launcher.class>com.pi4j.example/com.pi4j.example.FxglExample</launcher.class>
+
+
+        <!-- Setup for the RaspPi -->
+        <pi.username>pi</pi.username>
+        <pi.password>crowpi</pi.password>
+        <pi.ipnumber>crowpi.local</pi.ipnumber>
+        <pi.port>22</pi.port>
+        <pi.deploydirectory>/home/pi/deploy</pi.deploydirectory>
+        <pi.remote.jvmOptions/>
+
+        <!-- If a mouse is attached to Pi use 'true' -->
+        <pi.drm.enable.cursor>true</pi.drm.enable.cursor>
+
+        <!-- Java Compiler Version -->
+        <java.version>17</java.version>
+
+        <!-- Project Dependency Versions-->
+        <fxgl.version>17</fxgl.version>
+        <pi4j.version>2.1.1</pi4j.version>
+
+        <slf4j.version>1.7.32</slf4j.version>
+        <junit.version>5.8.2</junit.version>
+
+        <!-- Plugin Versions-->
+        <javafx.plugin.version>0.0.8</javafx.plugin.version>
+        <gluonfx.plugin.version>1.0.11</gluonfx.plugin.version>
+
+        <!-- Maven Plugin Versions -->
+        <maven-antrun-plugin.version>3.0.0</maven-antrun-plugin.version>
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <maven-dependency-plugin.version>3.2.0</maven-dependency-plugin.version>
+        <maven-jar-plugin.version>3.2.1</maven-jar-plugin.version>
+        <maven-javadoc-plugin.version>3.3.1</maven-javadoc-plugin.version>
+        <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
+        <exec-maven-plugin.version>3.0.0</exec-maven-plugin.version>
+
+        <!-- Maven Properties -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
 
-        <!-- DEPENDENCIES VERSIONS -->
-        <slf4j.version>1.7.32</slf4j.version>
-        <pi4j.version>2.0</pi4j.version>
-        <fxgl.version>11.17</fxgl.version>
+        <!-- PROJECT ENCODING PROPERTIES -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <!-- BUILD PLUGIN VERSIONS -->
-        <exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
-        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <!-- Ant Dependencies -->
+        <ant-jsch.version>1.10.9</ant-jsch.version>
+
+        <!-- gluonfx properties -->
+        <app.identifier>${launcher.class}</app.identifier>
+        <app.description>Bewegungsspiel</app.description>
+        <package.type/>
+        <bundle.version/>
+        <bundle.short.version/>
     </properties>
 
     <dependencies>
+        <!-- SQlite -->
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.36.0.2</version>
+        </dependency>
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -42,23 +90,41 @@
             <version>${slf4j.version}</version>
         </dependency>
 
-        <!-- include Pi4J Core -->
+        <!-- Pi4J  -->
+
+        <!-- Pi4J Core -->
         <dependency>
             <groupId>com.pi4j</groupId>
             <artifactId>pi4j-core</artifactId>
             <version>${pi4j.version}</version>
         </dependency>
 
-        <!-- include Pi4J Plugins (Platforms and I/O Providers) -->
+        <!-- Pi4J Raspberry Pi Platform -->
         <dependency>
             <groupId>com.pi4j</groupId>
             <artifactId>pi4j-plugin-raspberrypi</artifactId>
             <version>${pi4j.version}</version>
         </dependency>
+
+        <!-- Pi4J Raspberry Pi GPIO -->
         <dependency>
             <groupId>com.pi4j</groupId>
             <artifactId>pi4j-plugin-pigpio</artifactId>
             <version>${pi4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pi4j</groupId>
+            <artifactId>pi4j-plugin-linuxfs</artifactId>
+            <version>${pi4j.version}</version>
+        </dependency>
+
+        <!-- Pi4J Mock Platform -->
+        <dependency>
+            <groupId>com.pi4j</groupId>
+            <artifactId>pi4j-plugin-mock</artifactId>
+            <version>${pi4j.version}</version>
+            <!-- <scope>test</scope> -->
         </dependency>
 
         <!-- FXGL library which includes JavaFX -->
@@ -66,6 +132,21 @@
             <groupId>com.github.almasb</groupId>
             <artifactId>fxgl</artifactId>
             <version>${fxgl.version}</version>
+        </dependency>
+
+
+        <!-- JUnit -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -102,7 +183,7 @@
                         <argument>--module-path</argument>
                         <argument>${project.build.directory}/distribution</argument>
                         <argument>--module</argument>
-                        <argument>com.pi4j.example/com.pi4j.example.FxglExample</argument>
+                        <argument>${launcher.class}</argument>
                     </arguments>
                 </configuration>
             </plugin>
@@ -120,7 +201,7 @@
             <!-- COPY ANY RUNTIME SCRIPTS TO THE /target/distribution PATH  -->
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.8</version>
+                <version>${maven-antrun-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>copy</id>
@@ -162,6 +243,156 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>com.gluonhq</groupId>
+                <artifactId>gluonfx-maven-plugin</artifactId>
+                <version>1.0.11</version>
+                <configuration>
+                    <mainClass>your.mainClass</mainClass>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>jfx-remote-run-kiosk</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>transfer</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <!-- Ensure target directory exists on RaspPi -->
+                                        <sshexec host="${pi.ipnumber}" port="${pi.port}"
+                                                 username="${pi.username}" password="${pi.password}"
+                                                 trust="true" command="mkdir --parents ${pi.deploydirectory}; rm -f ${pi.deploydirectory}/*"/>
+
+                                        <!-- Transfer distribution folder to RaspPi via SCP -->
+                                        <scp trust="true"
+                                             todir="${pi.username}:${pi.password}@${pi.ipnumber}:${pi.deploydirectory}"
+                                             port="${pi.port}">
+                                            <fileset dir="${project.build.directory}/distribution">
+                                                <exclude name="javafx*.jar"/>/>
+                                            </fileset>
+                                        </scp>
+
+                                        <!-- Stop all running Java processes -->
+                                        <sshexec host="${pi.ipnumber}" port="${pi.port}"
+                                                 username="${pi.username}" password="${pi.password}" trust="true"
+                                                 failonerror="false" usepty="true" useSystemIn="true"
+                                                 suppresssystemerr="true" suppresssystemout="true"
+                                                 command="sudo killall -9 java"/>
+
+                                        <!-- Run JFX application on Raspberry Pi -->
+                                        <sshexec host="${pi.ipnumber}" port="${pi.port}"
+                                                 username="${pi.username}" password="${pi.password}" trust="true"
+                                                 failonerror="false" usepty="true" useSystemIn="true"
+                                                 command="sudo  java-kiosk  ${pi.remote.jvmOptions} -Xmx1G --module-path ${pi.deploydirectory} --module ${launcher.class} -Dmonocle.cursor.enabled=${pi.drm.enable.cursor} -Duse.egl=true"/>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.ant</groupId>
+                                <artifactId>ant-jsch</artifactId>
+                                <version>${ant-jsch.version}</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>jfx-remote-run-X11</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>transfer</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <!-- Ensure target directory exists on RaspPi -->
+                                        <sshexec host="${pi.ipnumber}" port="${pi.port}"
+                                                 username="${pi.username}" password="${pi.password}"
+                                                 trust="true" command="mkdir --parents ${pi.deploydirectory}; rm -f ${pi.deploydirectory}/*"/>
+
+                                        <!-- Transfer distribution folder to RaspPi via SCP -->
+                                        <scp trust="true"
+                                             todir="${pi.username}:${pi.password}@${pi.ipnumber}:${pi.deploydirectory}"
+                                             port="${pi.port}">
+                                            <fileset dir="${project.build.directory}/distribution">
+                                                <exclude name="javafx*.jar"/>/>
+                                            </fileset>
+                                        </scp>
+
+                                        <!-- Stop all running Java processes -->
+                                        <sshexec host="${pi.ipnumber}" port="${pi.port}"
+                                                 username="${pi.username}" password="${pi.password}" trust="true"
+                                                 failonerror="false" usepty="true" useSystemIn="true"
+                                                 suppresssystemerr="true" suppresssystemout="true"
+                                                 command="sudo killall -9 java"/>
+
+                                        <!-- Run JFX application on Raspberry Pi -->
+                                        <sshexec host="${pi.ipnumber}" port="${pi.port}"
+                                                 username="${pi.username}" password="${pi.password}" trust="true"
+                                                 failonerror="false" usepty="true" useSystemIn="true"
+                                                 command="DISPLAY=:0 XAUTHORITY=/home/pi/.Xauthority sudo -E java ${pi.remote.jvmOptions} --module-path /opt/javafx-sdk/lib:${pi.deploydirectory} --add-modules javafx.controls  --module ${launcher.class}"/>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.ant</groupId>
+                                <artifactId>ant-jsch</artifactId>
+                                <version>${ant-jsch.version}</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <!-- Activate JDWP server on CrowPi, can be used for local and remote runs -->
+        <profile>
+            <id>debug</id>
+            <properties>
+                <pi.remote.jvmOptions>
+                    -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005
+                </pi.remote.jvmOptions>
+            </properties>
+        </profile>
+        <profile>
+            <id>desktop</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <gluonfx.target>host</gluonfx.target>
+            </properties>
+        </profile>
+        <profile>
+            <id>pi</id>
+            <properties>
+                <gluonfx.target>linux-aarch64</gluonfx.target>
+            </properties>
+        </profile>
+    </profiles>
 </project>
