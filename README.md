@@ -5,7 +5,7 @@ Pi4J V2 :: Java I/O Library for Raspberry Pi :: Example game application with FX
 
 This project contains an example application which uses the Pi4J (V2) library and uses an Arcade button and joystick kit
 to control a JavaFX FXGL game. Full description is available on
-[the Pi4J website](https://v2.pi4j.com/getting-started/game-development-with-fxgl/)
+[the Pi4J website](https://pi4j.com/getting-started/fxgl/)
 
 ## PROJECT OVERVIEW
 
@@ -13,7 +13,7 @@ The goal of the example project is to show how to set up a Pi4J Maven for the Ra
 buttons.
 
 The full description is available on
-[Game development with FXGL](https://v2.pi4j.com/getting-started/game-development-with-fxgl/).
+[Game development with FXGL](https://pi4j.com/getting-started/fxgl/).
 
 ## COMPONENTS
 
@@ -35,7 +35,7 @@ This project uses Pi4J V.2 which has the following runtime dependency requiremen
   [here](http://abyz.me.uk/rpi/pigpio/download.html).
 
 As this application has a JavaFX user interface, we will also need some extra runtimes. This is fully described
-on ["User interface with JavaFX](https://v2.pi4j.com/getting-started/user-interface-with-javafx/).
+on [User interface with JavaFX](https://pi4j.com/getting-started/user-interface-with-javafx/).
 
 ## BUILD DEPENDENCIES & INSTRUCTIONS
 
