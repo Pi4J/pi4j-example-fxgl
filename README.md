@@ -30,9 +30,6 @@ This project uses Pi4J V.2 which has the following runtime dependency requiremen
 
 - [**SLF4J (API)**](https://www.slf4j.org/)
 - [**SLF4J-SIMPLE**](https://www.slf4j.org/)
-- [**PIGPIO Library**](http://abyz.me.uk/rpi/pigpio) (for the Raspberry Pi) - This dependency comes pre-installed on
-  recent Raspbian images. However, you can also download and install it yourself using the instructions found
-  [here](http://abyz.me.uk/rpi/pigpio/download.html).
 
 As this application has a JavaFX user interface, we will also need some extra runtimes. This is fully described
 on [User interface with JavaFX](https://pi4j.com/getting-started/user-interface-with-javafx/).
@@ -62,17 +59,17 @@ This is the list of files created by the build process of this example applicati
 
 * pi4j-core
 * pi4j-example-fxgl
-* pi4j-library-pigpio
-* pi4j-plugin-pigpio
+* pi4j-library-gpiod
+* pi4j-plugin-gpiod
 * pi4j-plugin-raspberrypi
 * slf4j-api
 * slf4j-simple
 * run.sh --> this is the actual start file which will run pi4j-example-fxgl
 
-Make the run script executable and start it like this:
+Start the application with the provided run script, you may need to adapt its content to match with the JavaFX runtime you installed:
 
 ```
-sudo ./run.sh
+./run.sh
 ```
 
 ## LICENSE
