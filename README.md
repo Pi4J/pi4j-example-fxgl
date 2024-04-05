@@ -31,8 +31,7 @@ This project uses Pi4J V.2 which has the following runtime dependency requiremen
 - [**SLF4J (API)**](https://www.slf4j.org/)
 - [**SLF4J-SIMPLE**](https://www.slf4j.org/)
 
-As this application has a JavaFX user interface, we will also need some extra runtimes. This is fully described
-on [User interface with JavaFX](https://pi4j.com/getting-started/user-interface-with-javafx/).
+As this application has a JavaFX user interface, the project requires the OpenJFX runtime. When the package is build, then the runtime is downloaded and added to the distribution directory.
 
 ## BUILD DEPENDENCIES & INSTRUCTIONS
 
@@ -52,7 +51,7 @@ Gradle) folder. Specifically all dependency modules (JARs) and a simple `run.sh`
 `target/distribution` (Maven) or `build/distribution` (Gradle) folder.
 
 These are all the required files needed to distribute (copy) to your Raspberry Pi to run this project. If you are using
-the native bindings running locally on the Raspberry Pi, then you make have to run the program using `sudo`
+the native bindings running locally on the Raspberry Pi, then you may have to run the program using `sudo`
 to gain the necessary access permissions to the hardware I/O.
 
 This is the list of files created by the build process of this example application:
