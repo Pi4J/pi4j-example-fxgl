@@ -46,9 +46,8 @@ mvn clean package
 
 ### Compiled application to run on the Raspberry Pi
 
-Once the build is complete and was successful, you can find the compiled artifacts in the `target` (Maven) or `build` (
-Gradle) folder. Specifically all dependency modules (JARs) and a simple `run.sh` bash script will be located in the
-`target/distribution` (Maven) or `build/distribution` (Gradle) folder.
+Once the build is complete and was successful, you can find the compiled artifacts in the `target` folder. Specifically 
+all dependency modules (JARs) and a simple `run.sh` bash script will be located in the `target/distribution` folder.
 
 These are all the required files needed to distribute (copy) to your Raspberry Pi to run this project. If you are using
 the native bindings running locally on the Raspberry Pi, then you may have to run the program using `sudo`
