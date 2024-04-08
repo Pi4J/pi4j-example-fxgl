@@ -23,7 +23,7 @@
         <!-- DEPENDENCIES VERSIONS -->
         <slf4j.version>2.0.12</slf4j.version>
         <pi4j.version>2.5.1</pi4j.version>
-        <fxgl.version>21</fxgl.version>
+        <fxgl.version>21.1</fxgl.version>
 
         <!-- BUILD PLUGIN VERSIONS -->
         <exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
@@ -138,10 +138,10 @@
 
                                 <echo message="Copying distribution files..."/>
                                 <copy todir="${project.build.directory}/distribution" overwrite="true" flatten="true">
-                                    <fileset dir="assets" includes="*.sh"></fileset>
+                                    <fileset dir="assets" includes="*.sh"/>
                                 </copy>
                                 <copy todir="${project.build.directory}/distribution/openjfx" overwrite="true">
-                                    <fileset dir="download/openjfx/extracted_files/openjfx" />
+                                    <fileset dir="download/openjfx/extracted_files/openjfx"/>
                                 </copy>
                                 <chmod dir="${project.build.directory}/distribution" perm="ugo+rx" includes="**/*.sh"/>
                             </target>
@@ -178,10 +178,31 @@
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>true</overWriteSnapshots>
                             <overWriteIfNewer>true</overWriteIfNewer>
+                            <!-- exclude platform specific dependencies, as we add the runtime in the assembly-->
+                            <excludeClassifiers>linux,win,mac</excludeClassifiers>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <descriptors>
+                        <descriptor>src/assembly/assembly.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>all</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 </project>

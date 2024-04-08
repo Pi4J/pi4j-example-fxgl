@@ -1,8 +1,8 @@
 @echo off
 
 REM Variables
-set URL="https://download2.gluonhq.com/openjfx/23/openjfx-23-ea+3_linux-aarch64_bin-sdk.zip"
-set SHA_URL="https://download2.gluonhq.com/openjfx/23/openjfx-23-ea+3_linux-aarch64_bin-sdk.zip.sha256"
+set URL="https://download2.gluonhq.com/openjfx/22/openjfx-22_linux-aarch64_bin-sdk.zip"
+set SHA_URL="https://download2.gluonhq.com/openjfx/22/openjfx-22_linux-aarch64_bin-sdk.zip.sha256"
 set TARGET_DIR="target\openjfx"
 set SUBDIR="extracted_files"
 set TEMP_DIR="%TEMP%\openjfx_temp"
