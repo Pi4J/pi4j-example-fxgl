@@ -36,7 +36,7 @@ then the runtime is downloaded and added to the distribution directory.
 
 ## BUILD DEPENDENCIES & INSTRUCTIONS
 
-This project can be built with [Apache Maven](https://maven.apache.org/) 3.6 (or later) and Java 11 OpenJDK (or later).
+This project can be built with [Apache Maven](https://maven.apache.org/) 3.6 (or later) and Java 17 OpenJDK (or later).
 These prerequisites must be installed prior to building this project. The following command can be used to download all
 project dependencies and compile the Java module. You can build this project directly on a Raspberry Pi with Java 17+.
 
