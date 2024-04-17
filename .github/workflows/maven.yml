@@ -25,7 +25,7 @@ jobs:
     - name: Make staging directory
       run: mkdir staging
     - name: Copy JAR to staging
-      run: cp target/distribution/* staging   
+      run: cp -r target/distribution/* staging
     - name: Upload
       uses: actions/upload-artifact@v2
       with:
